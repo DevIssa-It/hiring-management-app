@@ -1,5 +1,3 @@
-// Input component with Tailwind CSS styling
-
 export interface InputProps {
   type?: 'text' | 'email' | 'tel' | 'number' | 'date' | 'password';
   label?: string;
@@ -26,9 +24,9 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-100 mb-1">
           {label}
-          {required && <span className="text-danger-500 ml-1">*</span>}
+          {required && <span className="text-danger-main ml-1">*</span>}
         </label>
       )}
       <input
@@ -39,10 +37,12 @@ export const Input: React.FC<InputProps> = ({
         disabled={disabled}
         required={required}
         className={`
-          w-full px-3 py-2 border rounded-lg text-gray-900 placeholder-gray-400
-          focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-          disabled:bg-gray-100 disabled:cursor-not-allowed
-          ${error ? 'border-danger-500' : 'border-gray-300'}
+          w-full px-3 py-2 border rounded-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
+          focus:outline-none
+          disabled:bg-neutral-30 disabled:text-neutral-60 disabled:cursor-not-allowed disabled:border-neutral-40
+          ${error 
+            ? 'border-danger-main' 
+            : 'border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
         `}
       />
       {error && (
