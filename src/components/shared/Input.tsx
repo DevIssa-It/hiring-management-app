@@ -24,7 +24,7 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-neutral-100 mb-1">
+        <label className="block text-sm font-medium text-neutral-100 mb-2">
           {label}
           {required && <span className="text-danger-main ml-1">*</span>}
         </label>
