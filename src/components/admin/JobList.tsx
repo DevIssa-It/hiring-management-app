@@ -1,7 +1,4 @@
-// Admin JobList Component
-// See IMPLEMENTATION_GUIDE.md for details
-
-import { JobListItem } from '@/types';
+import type { JobListItem } from '@/types';
 
 export interface JobListProps {
   jobs: JobListItem[];
