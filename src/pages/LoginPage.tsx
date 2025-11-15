@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "../components/shared/Input";
 import { Button } from "../components/shared/Button";
 import Logo1 from '../assets/Logo1.svg';
+import { getUserByEmail, demoCredentials } from "../data/dummyData";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ export const LoginPage = () => {
                     </p>
                 </div>
 
-                <div id="Form" className="w-full max-w-md">
+                <div id="Form" className="w-full max-w-max">
                     <form onSubmit={(e) => {e.preventDefault(); handleLogin();}}>
                         <div className="space-y-5">
                             <Input
