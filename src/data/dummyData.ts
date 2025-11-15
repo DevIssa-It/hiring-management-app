@@ -2,7 +2,6 @@
 
 import { 
   User, 
-  Admin, 
   Job, 
   Application, 
   UserRole, 
@@ -14,7 +13,7 @@ import {
 
 // ==================== USERS ====================
 
-export const dummyAdmin: Admin = {
+export const dummyAdmin: User & { name: string; department?: string } = {
   id: 'admin-1',
   email: 'admin@company.com',
   role: UserRole.ADMIN,
