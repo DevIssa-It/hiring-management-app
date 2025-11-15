@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  /* Jika perlu custom component classes, tambahkan di sini */
+  /* Contoh: .btn-custom { @apply px-4 py-2 rounded-lg; } */
+}
+
+@layer utilities {
+  /* Jika perlu custom utility classes, tambahkan di sini */
+  .animate-spin-slow {
+    animation: spin 20s linear infinite;
+  }
+}
