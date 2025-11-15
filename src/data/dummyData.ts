@@ -1,15 +1,72 @@
 // Dummy Data for Testing
 
 import { 
-  User, 
-  Job, 
-  Application, 
   UserRole, 
   JobStatus, 
   EmploymentType,
   Gender,
   FieldRequirement 
 } from '@/types';
+
+interface User {
+  id: string;
+  email: string;
+  role: UserRole;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+type ApplicationStatus = 'submitted' | 'reviewed' | 'shortlisted' | 'rejected' | 'accepted';
+
+interface ApplicationData {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  gender?: Gender;
+  dateOfBirth?: Date;
+  domicile?: string;
+}
+
+interface Application {
+  id: string;
+  jobId: string;
+  applicantData: ApplicationData;
+  status: ApplicationStatus;
+  appliedAt: Date;
+  reviewedAt?: Date;
+}
+
+interface JobFormConfiguration {
+  fullName: FieldRequirement;
+  email: FieldRequirement;
+  phone: FieldRequirement;
+  gender: FieldRequirement;
+  dateOfBirth: FieldRequirement;
+  linkedin: FieldRequirement;
+  portfolio: FieldRequirement;
+  domicile: FieldRequirement;
+  expectedSalary: FieldRequirement;
+  availability: FieldRequirement;
+  profilePicture: FieldRequirement;
+  resume: FieldRequirement;
+  coverLetter: FieldRequirement;
+}
+
+interface Job {
+  id: string;
+  title: string;
+  description: string;
+  department: string;
+  location: string;
+  employmentType: EmploymentType;
+  salaryMin?: number;
+  salaryMax?: number;
+  status: JobStatus;
+  formConfiguration: JobFormConfiguration;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 // ==================== USERS ====================
 
