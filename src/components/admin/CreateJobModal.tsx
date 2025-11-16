@@ -103,85 +103,87 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
       footer={footer}
       size="xl">
 
-      <div id="create-job-modal" className="space-y-6">
-        <div className="space-y-4">
-          <Input
-            label="Job Name"
-            placeholder="Ex: Front End Engineer"
-            value={formData.jobName}
-            onChange={(val) => setFormData({ ...formData, jobName: val })}
-            required 
-          />
-
-          <Select
-            label="Job Type"
-            placeholder="Select Job Type"
-            value={formData.jobType}
-            onChange={(e) => setFormData({ ...formData, jobType: e.target.value })}
-            options={[
-              {value: 'full-time', label: 'Full Time'},
-              {value: 'part-time', label: 'Part Time'},
-              {value: 'contract', label: 'Contract'},
-              {value: 'internship', label: 'Internship'},
-            ]}
-            required 
-          />
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-90 mb-2">
-              Job Description
-              <span className="text-danger-main ml-1">*</span>
-            </label>
-            <textarea
-              className="w-full px-3 py-2 border border-neutral-40 rounded-lg text-neutral-100 focus:ring-2 focus:ring-primary-focus focus:border-primary-focus outline-none transition-all"
-              rows={4}
-              placeholder="Enter job description"
-              value={formData.JobDescription}
-              onChange={(e) => setFormData({ ...formData, JobDescription: e.target.value})}
-              required
-            />
-          </div>
-
-          <Input
-            label="Number of Candidate Nedeed"
-            type="number"
-            placeholder="Ex: 5"
-            value={formData.candidateCount.toString()}
-            onChange={(val) => setFormData({ ...formData, candidateCount: parseInt(val)|| 0})}
-            required 
-          />
-        </div>
-
-        <div id="salary">
-          <h3 className="text-base font-semibold text-neutral-90 mb-4">Job Salary</h3>
-          <div className="grid grid-cols-2 gap-4">
+      <form id="create-job-form" onSubmit={handleSubmit}>
+        <div id="create-job-modal" className="space-y-6">
+          <div className="space-y-4">
             <Input
-              label="Minimum Estimated Salary"
-              type="number"
-              placeholder="Ex : Rp7.500.000"
-              value={formData.minSalary.toString()}
-              onChange={(val) => setFormData({...formData, minSalary: parseInt(val) || 0})}
+              label="Job Name"
+              placeholder="Ex: Front End Engineer"
+              value={formData.jobName}
+              onChange={(val) => setFormData({ ...formData, jobName: val })}
+              required 
+            />
+
+            <Select
+              label="Job Type"
+              placeholder="Select Job Type"
+              value={formData.jobType}
+              onChange={(e) => setFormData({ ...formData, jobType: e.target.value })}
+              options={[
+                {value: 'full-time', label: 'Full Time'},
+                {value: 'part-time', label: 'Part Time'},
+                {value: 'contract', label: 'Contract'},
+                {value: 'internship', label: 'Internship'},
+              ]}
+              required 
+            />
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-90 mb-2">
+                Job Description
+                <span className="text-danger-main ml-1">*</span>
+              </label>
+              <textarea
+                className="w-full px-3 py-2 border border-neutral-40 rounded-lg text-neutral-100 focus:ring-2 focus:ring-primary-focus focus:border-primary-focus outline-none transition-all"
+                rows={4}
+                placeholder="Enter job description"
+                value={formData.JobDescription}
+                onChange={(e) => setFormData({ ...formData, JobDescription: e.target.value})}
+                required
               />
+            </div>
+
+            <Input
+              label="Number of Candidate Nedeed"
+              type="number"
+              placeholder="Ex: 5"
+              value={formData.candidateCount.toString()}
+              onChange={(val) => setFormData({ ...formData, candidateCount: parseInt(val)|| 0})}
+              required 
+            />
+          </div>
+
+          <div id="salary">
+            <h3 className="text-base font-semibold text-neutral-90 mb-4">Job Salary</h3>
+            <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Maximum Estimated Salary"
+                label="Minimum Estimated Salary"
                 type="number"
-                placeholder="Ex : 10.000.000"
-                value={formData.maxSalary.toString()}
-                onChange={(val) => setFormData({...formData, maxSalary: parseInt(val) || 0})}
+                placeholder="Ex : Rp7.500.000"
+                value={formData.minSalary.toString()}
+                onChange={(val) => setFormData({...formData, minSalary: parseInt(val) || 0})}
+                />
+                <Input
+                  label="Maximum Estimated Salary"
+                  type="number"
+                  placeholder="Ex : 10.000.000"
+                  value={formData.maxSalary.toString()}
+                  onChange={(val) => setFormData({...formData, maxSalary: parseInt(val) || 0})}
+                />
+            </div>
+          </div>
+
+          <div id="form-configuration">
+              <h3 className="text-base font-semibold text-neutral-90 mb-4">
+                Minimum Profile Information
+              </h3>
+              <JobFormConfig
+                configuration={formConfig}
+                onChange={setFormConfig}
               />
           </div>
         </div>
-
-        <div id="form-configuration">
-            <h3 className="text-base font-semibold text-neutral-90 mb-4">
-              Minimum Profile Information
-            </h3>
-            <JobFormConfig
-              configuration={formConfig}
-              onChange={setFormConfig}
-            />
-        </div>
-      </div>
+      </form>
     </Modal>
   );
 };
