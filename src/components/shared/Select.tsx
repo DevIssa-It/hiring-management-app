@@ -9,7 +9,7 @@ export interface SelectProps {
   label?: string;
   options: SelectOption[];
   value: string;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
   required?: boolean;
   error?: string;
@@ -31,25 +31,25 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-90 mb-2">
           {label}
-          {required && <span className="text-danger-500 ml-1">*</span>}
+          {required && <span className="text-danger-main ml-1">*</span>}
         </label>
       )}
       <select
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         disabled={disabled}
         required={required}
         aria-label={label || placeholder}
         className={`
-          w-full px-3 py-2 border rounded-lg text-gray-900 bg-white
-          focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-          disabled:bg-gray-100 disabled:cursor-not-allowed
-          ${error ? 'border-danger-500' : 'border-gray-300'}
+          w-full px-3 py-2 border rounded-lg text-neutral-90 bg-white
+          focus:outline-none focus:ring-2 focus:ring-primary-focus focus:border-primary-main
+          disabled:bg-neutral-30 disabled:text-neutral-60 disabled:cursor-not-allowed
+          ${error ? 'border-danger-main' : 'border-neutral-40'}
         `}
       >
-        {placeholder && <option value="">{placeholder}</option>}
+        {placeholder && <option value="" disabled>{placeholder}</option>}
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
@@ -57,7 +57,7 @@ export const Select: React.FC<SelectProps> = ({
         ))}
       </select>
       {error && (
-        <p className="mt-1 text-sm text-danger-600">{error}</p>
+        <p className="mt-1 text-sm text-danger-main">{error}</p>
       )}
     </div>
   );

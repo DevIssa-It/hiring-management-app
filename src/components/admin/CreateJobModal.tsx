@@ -31,7 +31,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
   const [formConfig, setFormConfig] = useState<JobFormConfiguration>({
     fullName: 'mandatory' as FieldRequirement,
     email: 'mandatory' as FieldRequirement,
-    phone: 'madatory' as FieldRequirement,
+    phone: 'mandatory' as FieldRequirement,
     gender: 'mandatory' as FieldRequirement,
     dateOfBirth: 'optional' as FieldRequirement,
     linkedin: 'optional' as FieldRequirement,
@@ -86,6 +86,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
 
   const footer = (
     <>
+      <Button variant="outline" onClick={onClose}>Save as Draft</Button>
       <Button variant="primary"  onClick={onClose}>
         Publish
       </Button>
@@ -105,7 +106,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
             label="Job Name"
             placeholder="Ex: Front End Engineer"
             value={formData.jobName}
-            onChange={(e) => setFormData({ ...formData, jobName: e.target.value })}
+            onChange={(val) => setFormData({ ...formData, jobName: val })}
             required 
           />
 
@@ -133,6 +134,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               placeholder="Enter job description"
               value={formData.JobDescription}
               onChange={(e) => setFormData({ ...formData, JobDescription: e.target.value})}
+              required
             />
           </div>
 
@@ -140,8 +142,8 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
             label="Number of Candidate Nedeed"
             type="number"
             placeholder="Ex: 5"
-            value={formData.candidateCount}
-            onChange={(e) => setFormData({ ...formData, candidateCount: parseInt(e.target.value)|| 0})}
+            value={formData.candidateCount.toString()}
+            onChange={(val) => setFormData({ ...formData, candidateCount: parseInt(val)|| 0})}
             required 
           />
         </div>
@@ -153,15 +155,15 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               label="Minimum Estimated Salary"
               type="number"
               placeholder="Ex : Rp7.500.000"
-              value={formData.minSalary}
-              onChange={(e) => setFormData({...formData, minSalary: parseInt(e.target.value) || 0})}
+              value={formData.minSalary.toString()}
+              onChange={(val) => setFormData({...formData, minSalary: parseInt(val) || 0})}
               />
               <Input
                 label="Maximum Estimated Salary"
                 type="number"
                 placeholder="Ex : 10.000.000"
-                value={formData.maxSalary}
-                onChange={(e) => setFormData({...formData, maxSalary: parseInt(e.target.value) || 0})}
+                value={formData.maxSalary.toString()}
+                onChange={(val) => setFormData({...formData, maxSalary: parseInt(val) || 0})}
               />
           </div>
         </div>
