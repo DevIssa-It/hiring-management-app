@@ -165,6 +165,16 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               />
           </div>
         </div>
+
+        <div id="form-configuration">
+            <h3 className="text-base font-semibold text-neutral-90 mb-4">
+              Minimum Profile Information
+            </h3>
+            <JobFormConfig
+              configuration={formConfig}
+              onChange={setFormConfig}
+            />
+        </div>
       </div>
     </Modal>
   );
