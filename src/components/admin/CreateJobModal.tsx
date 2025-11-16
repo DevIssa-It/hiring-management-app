@@ -126,7 +126,8 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-neutral-90 mb-2">
-              Job Desciption
+              Job Description
+              <span className="text-danger-main ml-1">*</span>
             </label>
             <textarea
               className="w-full px-3 py-2 border border-neutral-40 rounded-lg text-neutral-100 focus:ring-2 focus:ring-primary-focus focus:border-primary-focus outline-none transition-all"
