@@ -12,13 +12,14 @@ export const Navbar: React.FC<NavbarProps> = ({
     onAvatarClick,
 }) => {
     return (
-        <div id="navbar" className="flex items-center justify-between mb-6">
-            {title && (
+        <div id="navbar" className="mb-4">
+        <div id="content" className="flex items-center justify-between mb-4">
+            {title ? (
                 <h1 className="text-2xl font-bold text-neutral-100">{title}</h1>
+            ) : (
+                <div />
             )}
-
-            {!title && <div />}
-
+            
             {showAvatar && (
                 <button
                     onClick={onAvatarClick}
@@ -26,7 +27,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         {avatarText}
                     </button>
             )}
-
         </div>
+
+        <div id="divider" className="border-b border-neutral-40 -mx-6"></div>
+    </div>
     );
 };

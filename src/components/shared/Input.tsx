@@ -40,29 +40,29 @@ export const Input: React.FC<InputProps> = ({
             {icon}
           </div>
         )}
-      </div>
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        required={required}
-        className={`
-          w-full px-3 py-2 border rounded-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
-          focus:outline-none
-          disabled:bg-neutral-30 disabled:text-neutral-60 disabled:cursor-not-allowed disabled:border-neutral-40
-          ${error 
-            ? 'border-danger-main' 
-            : 'border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
-        `}
-      />
+        <input
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          required={required}
+          className={`
+            w-full px-3 py-2 border rounded-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
+            focus:outline-none
+            disabled:bg-neutral-30 disabled:text-neutral-60 disabled:cursor-not-allowed disabled:border-neutral-40
+            ${error 
+              ? 'border-danger-main' 
+              : 'border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
+          `}
+        />
 
-      {icon && iconPosition === 'right' && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral60 pointer-events-none">
-          {icon}
-        </div>
-      )}
+        {icon && iconPosition === 'right' && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral60 pointer-events-none">
+            {icon}
+          </div>
+        )}
+      </div>
       {error && (
         <p className="mt-1 text-sm text-danger-600">{error}</p>
       )}
