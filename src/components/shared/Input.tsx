@@ -8,6 +8,8 @@ export interface InputProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   className?: string;
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -20,6 +22,8 @@ export const Input: React.FC<InputProps> = ({
   onChange,
   disabled = false,
   className = '',
+  icon,
+  iconPosition = 'left',
 }) => {
   return (
     <div className={`w-full ${className}`}>
@@ -29,6 +33,14 @@ export const Input: React.FC<InputProps> = ({
           {required && <span className="text-danger-main ml-1">*</span>}
         </label>
       )}
+
+      <div id="icon" className="relative">
+        {icon && iconPosition == 'left' && (
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-60 pointer-events-none">
+            {icon}
+          </div>
+        )}
+      </div>
       <input
         type={type}
         placeholder={placeholder}
@@ -45,6 +57,12 @@ export const Input: React.FC<InputProps> = ({
             : 'border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
         `}
       />
+
+      {icon && iconPosition === 'right' && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral60 pointer-events-none">
+          {icon}
+        </div>
+      )}
       {error && (
         <p className="mt-1 text-sm text-danger-600">{error}</p>
       )}

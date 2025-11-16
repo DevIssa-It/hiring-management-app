@@ -1,7 +1,7 @@
 // Applicant ApplicationForm Component
 // Dynamic form based on job configuration
 
-import { Job, ApplicationData } from '@/types';
+import type { Job, ApplicationData } from '@/types';
 import { useState } from 'react';
 
 export interface ApplicationFormProps {

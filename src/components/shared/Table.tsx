@@ -1,6 +1,6 @@
 // Table component with Tailwind CSS styling
 
-import { TableColumn } from '@/types';
+import type { TableColumn } from '@/types';
 
 export interface TableProps<T> {
   columns: TableColumn[];

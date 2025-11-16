@@ -40,8 +40,8 @@ export const LoginPage = () => {
                 window.location.href = '/applicant/dashboard';
             }
 
-        } catch (err: any) {
-            setError(err.message ||'Email atau password salah.');
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : 'Email atau password salah.');
         } finally {
             setLoading(false);
         }
@@ -55,7 +55,7 @@ export const LoginPage = () => {
                         <img src={Logo1} alt="Logo" className="w-32 h-auto" />
                     </div>
                     <h1 className="text-2xl font-semibold text-neutral-100">
-                        Masuk Ke TalentHub
+                        Masuk Ke TalentHunt
                     </h1>
                     <p className="text-neutral-70 text-sm mt-2">
                         Kelola Proses Rekrutmen Anda Dengan Mudah

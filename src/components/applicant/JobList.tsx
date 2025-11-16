@@ -1,6 +1,6 @@
 // Applicant JobList Component
 
-import { Job } from '@/types';
+import type { Job } from '@/types';
 
 export interface ApplicantJobListProps {
   jobs: Job[];

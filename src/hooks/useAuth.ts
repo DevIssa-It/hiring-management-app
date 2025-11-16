@@ -2,7 +2,8 @@
 // Authentication logic
 
 import { useState, useEffect } from 'react';
-import { User, UserRole } from '@/types';
+import type { User } from '@/types';
+import { UserRole } from '@/types';
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);

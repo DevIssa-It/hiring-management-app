@@ -1,6 +1,7 @@
 // Validation utilities
 
-import { FieldRequirement, JobFormConfiguration, ApplicationData } from '@/types';
+import type { JobFormConfiguration, ApplicationData } from '@/types';
+import { FieldRequirement } from '@/types';
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const phoneRegex = /^(\+62|62|0)[0-9]{9,12}$/;

@@ -1,7 +1,8 @@
 // Authentication Service
 
 import { api } from './api';
-import { User, UserRole, ApiResponse } from '@/types';
+import type { User, ApiResponse } from '@/types';
+import { UserRole } from '@/types';
 
 interface LoginResponse {
   user: User;

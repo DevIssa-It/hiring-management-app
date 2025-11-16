@@ -1,6 +1,6 @@
 // Notification/Toast component with Tailwind CSS styling
 
-import { Notification as NotificationType } from '@/types';
+import type { Notification as NotificationType } from '@/types';
 import { useEffect } from 'react';
 
 export interface NotificationProps {

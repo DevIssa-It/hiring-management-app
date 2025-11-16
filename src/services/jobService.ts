@@ -2,7 +2,7 @@
 // API calls for job operations
 
 import { api } from './api';
-import { Job, JobListItem, ApiResponse, PaginatedResponse } from '@/types';
+import type { Job, JobListItem, ApiResponse, PaginatedResponse } from '@/types';
 
 export const jobService = {
   async getJobs(params?: {

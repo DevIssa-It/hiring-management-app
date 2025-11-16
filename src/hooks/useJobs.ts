@@ -2,7 +2,7 @@
 // Job CRUD operations
 
 import { useState, useEffect } from 'react';
-import { Job, JobListItem } from '@/types';
+import type { Job, JobListItem } from '@/types';
 
 export const useJobs = () => {
   const [jobs, setJobs] = useState<JobListItem[]>([]);

@@ -1,7 +1,7 @@
 // Admin CandidateTable Component
 // Table with resizable and reorderable columns
 
-import { Application } from '@/types';
+import type { Application } from '@/types';
 
 export interface CandidateTableProps {
   jobId: string;

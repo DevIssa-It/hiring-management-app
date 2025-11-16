@@ -2,7 +2,7 @@
 // API calls for application operations
 
 import { api } from './api';
-import { Application, ApplicationData, ApiResponse, PaginatedResponse } from '@/types';
+import type { Application, ApplicationData, ApiResponse, PaginatedResponse } from '@/types';
 
 export const applicationService = {
   async getApplications(

@@ -1,7 +1,7 @@
 // Admin CreateJobModal Component
 // See IMPLEMENTATION_GUIDE.md for details
 
-import { Job } from '@/types';
+import type { Job } from '@/types';
 
 export interface CreateJobModalProps {
   isOpen: boolean;

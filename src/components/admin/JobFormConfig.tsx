@@ -1,7 +1,8 @@
 // Admin JobFormConfig Component
 // Configure form fields as mandatory/optional/off
 
-import { JobFormConfiguration, FieldRequirement } from '@/types';
+import type { JobFormConfiguration } from '@/types';
+import { FieldRequirement } from '@/types';
 
 export interface JobFormConfigProps {
   configuration: JobFormConfiguration;

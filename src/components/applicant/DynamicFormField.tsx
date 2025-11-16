@@ -1,7 +1,7 @@
 // DynamicFormField Component
 // Renders form field based on configuration
 
-import { FormField } from '@/types';
+import type { FormField } from '@/types';
 
 export interface DynamicFormFieldProps {
   field: FormField;

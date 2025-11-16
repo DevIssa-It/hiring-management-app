@@ -1,6 +1,6 @@
 // Applicant JobCard Component
 
-import { Job } from '@/types';
+import type { Job } from '@/types';
 
 export interface JobCardProps {
   job: Job;

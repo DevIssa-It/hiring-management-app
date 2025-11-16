@@ -2,7 +2,7 @@
 // Application management
 
 import { useState } from 'react';
-import { Application, ApplicationData } from '@/types';
+import type { Application, ApplicationData } from '@/types';
 
 export const useApplications = () => {
   const [applications, setApplications] = useState<Application[]>([]);

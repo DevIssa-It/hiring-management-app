@@ -2,7 +2,7 @@
 // Table state management (sort, filter, pagination)
 
 import { useState, useMemo } from 'react';
-import { TableState } from '@/types';
+import type { TableState } from '@/types';
 
 export const useTable = <T extends Record<string, any>>(
   data: T[],

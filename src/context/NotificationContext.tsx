@@ -2,7 +2,7 @@
 // Global notification/toast system
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { Notification } from '@/types';
+import type { Notification } from '@/types';
 
 interface NotificationContextType {
   notifications: Notification[];
