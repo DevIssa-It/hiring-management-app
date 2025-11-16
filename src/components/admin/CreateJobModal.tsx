@@ -99,6 +99,46 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
     return !Object.values(newErrors).some(error => error);
   };
 
+  const handleSaveDraft = async () => {
+    setIsSubmitting(true);
+    try {
+      await onSave({
+        title: formData.jobName || 'Untitled Job',
+        type: formData.jobType,
+        description: formData.jobDescription,
+        candidatesNeeded: formData.candidateCount,
+        salaryRange: {
+          min: formData.minSalary,
+          max: formData.maxSalary,
+        },
+        formConfiguration: formConfig,
+        status: 'draft', // Status draft, belum publish
+      });
+      
+      // Reset form
+      setFormData({
+        jobName: '',
+        jobType: '',
+        jobDescription: '',
+        candidateCount: 0,
+        minSalary: 0,
+        maxSalary: 0,
+      });
+      setErrors({
+        jobName: false,
+        jobType: false,
+        jobDescription: false,
+        candidateCount: false,
+      });
+      
+      onClose();
+    } catch (error) {
+      console.error('Failed to save draft: ', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
@@ -116,6 +156,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           max: formData.maxSalary,
         },
         formConfiguration: formConfig,
+        status: 'active', // Status active, publish ke applicant
       });
       
       // Reset form dan errors
@@ -144,15 +185,21 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
 
   const footer = (
     <>
-      <Button variant="outline" onClick={onClose} type="button">
-        Cancel
+      <Button 
+        variant="outline" 
+        onClick={handleSaveDraft} 
+        disabled={isSubmitting}
+        type="button"
+        className="w-28 h-8 text-sm font-semibold">
+        {isSubmitting ? 'Saving...' : 'Save as Draft'}
       </Button>
       <Button
         variant="primary"
         onClick={handleSubmit}
         disabled={isSubmitting}
-        type="button">
-        {isSubmitting ? 'Publishing...' : 'Publish'}
+        type="button"
+        className="w-28 h-8 text-sm font-semibold">
+        {isSubmitting ? 'Publishing...' : 'Publish Job'}
       </Button>
     </>
   );
