@@ -87,8 +87,11 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
   const footer = (
     <>
       <Button variant="outline" onClick={onClose}>Save as Draft</Button>
-      <Button variant="primary"  onClick={onClose}>
-        Publish
+      <Button 
+        variant="primary"  
+        onClick={handleSubmit} 
+        disabled={isSubmitting}>
+        {isSubmitting ? 'Publishing...' : 'Publish'}
       </Button>
     </>
   )
