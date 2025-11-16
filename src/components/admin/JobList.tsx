@@ -3,6 +3,7 @@ import { JobCard } from './JobCard';
 export interface JobListProps {
   jobs: JobListItem[];
   onJobClick: (jobId: string) => void;
+  onStatusChange?: (jobId: string, status: 'active' | 'inactive') => void;
 }
 
 export const JobList: React.FC<JobListProps> = ({
@@ -16,9 +17,9 @@ export const JobList: React.FC<JobListProps> = ({
                 key={job.id}
                 job={job}
                 onClick={onJobClick}
+                onStatusChange={onStatusChange}
               />              
             ))}
           </div>
-
   );
 };
