@@ -6,6 +6,8 @@ import { JobList } from "@/components/admin/JobList";
 import { CreateJobModal } from "@/components/admin/CreateJobModal";
 import { useJobs } from "@/hooks/useJobs";
 import { Button } from "@/components/shared/Button";
+import { useNotification } from "@/context/NotificationContext";
+import { Notification } from "@/components/shared/Notification";
 import type { Job } from "@/types";
 import EmptyState from '@/assets/EmptyState.svg';
 
@@ -13,6 +15,7 @@ export const AdminDashboard = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const {jobs, isLoading: loading, createJob} = useJobs();
+    const { notifications, showNotification, removeNotification } = useNotification();
 
     const handleJobClick = (jobId: string) => {
         console.log('Navigate to job: ', jobId);
@@ -23,8 +26,26 @@ export const AdminDashboard = () => {
     }
 
     const handleSubmitJob = async (jobData: Partial<Job>) => {
-        await createJob(jobData);
-        setIsCreateModalOpen(false);
+        try {
+            await createJob(jobData);
+            setIsCreateModalOpen(false);
+            
+            // Tampilkan notification success
+            showNotification(
+                'success',
+                'Success!',
+                'Job vacancy successfully created',
+                5000
+            );
+        } catch (error) {
+            // Tampilkan notification error
+            showNotification(
+                'error',
+                'Error!',
+                'Failed to create job vacancy',
+                5000
+            );
+        }
     }
 
     const filteredJobs = jobs.filter(job =>
@@ -34,6 +55,16 @@ export const AdminDashboard = () => {
 
     return (
         <div id="admin-dashobard" className="min-h-screen bg-neutral-10">
+            <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+                {notifications.map((notification) => (
+                    <Notification
+                        key={notification.id}
+                        notification={notification}
+                        onClose={removeNotification}
+                    />
+                ))}
+            </div>
+
             <div id="container" className="max-w-full mx-auto px-6 pt-4">
                 <Navbar
                     title="Job List"
