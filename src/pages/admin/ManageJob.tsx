@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Navbar } from '@/components/shared/Navbar';
@@ -7,18 +6,25 @@ import { Notification } from '@/components/shared/Notification';
 import { useNotification } from '@/context/NotificationContext';
 import EmptyApplicant from '@/assets/EmptyApplicant.svg';
 import { getJobById } from '@/data/dummyData';
-// import { Table } from '@/components/shared/Table'; // Uncomment jika sudah ada
-// import { useApplications } from '@/hooks/useApplications'; // Uncomment jika sudah ada
+import { getApplicationsByJob } from '@/data/dummyData';
+import { CandidateTable } from '@/components/admin/CandidateTable';
 
 export const ManageJob = () => {
 	const { jobId } = useParams<{ jobId: string }>();
     const job = getJobById(jobId || '');
-	// const { applications, isLoading } = useApplications(jobId);
-	// Simulasi data kandidat dan loading
+	const rawApplications = getApplicationsByJob(jobId || '');
+	const applications = rawApplications.map(app => ({
+		...app,
+		status: app.status as "submitted" | "accepted" | "rejected" | "reviewed" | "shortlisted"
+	}));
 	const [loading] = useState(false);
-	const candidates: any[] = [];
 	const jobTitle = job ? job.title : 'Job not found';
 	const { notifications, removeNotification } = useNotification();
+
+	const handleApplicationClick = (applicationId: string) => {
+		// Handle application click, e.g., navigate to application details
+		console.log('Application clicked:', applicationId);
+	};
 
 	return (
 		<div className="min-h-screen bg-neutral-10">
@@ -54,12 +60,12 @@ export const ManageJob = () => {
 				<h2 className="text-lg font-bold mb-6">{jobTitle}</h2>
 
 				{/* Card Container */}
-				<div className="bg-white rounded-xl border border-neutral-40 shadow-soft p-8 min-h-[400px] flex flex-col items-center justify-center">
+				<div className="bg-white rounded-xl border border-neutral-40 shadow-soft p-2 min-h-[400px] flex flex-col items-stretch">
 					{loading ? (
 						<div className="flex justify-center items-center py-20">
 							<span className="text-neutral-60">Loading candidates...</span>
 						</div>
-					) : candidates.length === 0 ? (
+					) : applications.length === 0 ? (
 						<>
 							<img src={EmptyApplicant} alt="No candidates" className="w-64 h-64 mb-6" />
 							<h3 className="text-lg font-semibold text-neutral-100 mb-2">No candidates found</h3>
@@ -68,8 +74,18 @@ export const ManageJob = () => {
 							</p>
 						</>
 					) : (
-						// <Table data={candidates} columns={[...]} />
-						<div>/* Table kandidat di sini */</div>
+						job?.formConfiguration ? (
+							<CandidateTable
+								jobId={jobId || ''}
+								applications={applications}
+								formConfiguration={job.formConfiguration}
+								onApplicationClick={handleApplicationClick}
+							/>
+						) : (
+							<div className="flex flex-col items-center py-20">
+								<span className="text-neutral-60">Job form configuration not found.</span>
+							</div>
+						)
 					)}
 				</div>
 			</div>

@@ -4,6 +4,7 @@ import { NotificationProvider } from './context/NotificationContext'
 import { LoginPage } from './pages/LoginPage'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import { ManageJob } from './pages/admin/ManageJob'
+import { ApplicantDashboard } from './pages/applicant/ApplicantDashboard'
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
 
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/job/:jobId/manage" element={<ManageJob />} />
+            
+            <Route path="/applicant" element={<ApplicantDashboard />} />
 
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
