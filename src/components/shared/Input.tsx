@@ -39,7 +39,7 @@ export const Input: React.FC<InputProps> = ({
       {prefix ? (
         // Dengan Prefix (Rp)
         <div className="flex items-center">
-          <span className="flex items-center justify-center px-3 py-2 bg-neutral-20 border border-r-0 border-neutral-40 rounded-l-lg text-neutral-90 font-medium">
+          <span className="flex items-center justify-center px-3 py-2 bg-neutral-20 border-2 border-r-0 border-neutral-40 rounded-l-lg text-neutral-90 font-medium">
             {prefix}
           </span>
           <input
@@ -50,12 +50,12 @@ export const Input: React.FC<InputProps> = ({
             disabled={disabled}
             required={required}
             className={`
-              flex-1 px-3 py-2 border rounded-r-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
+              flex-1 px-3 py-2 border-2 rounded-r-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
               focus:outline-none
               disabled:bg-neutral-30 disabled:text-neutral-60 disabled:cursor-not-allowed disabled:border-neutral-40
               ${error 
-                ? 'border-danger-main' 
-                : 'border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
+                ? 'border-2 border-danger-main' 
+                : 'border-2 border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
             `}
           />
         </div>
@@ -74,14 +74,14 @@ export const Input: React.FC<InputProps> = ({
             disabled={disabled}
             required={required}
             className={`
-              w-full px-3 py-2 border rounded-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
+              w-full px-3 py-2 border-2 rounded-lg text-neutral-100 placeholder:text-neutral-70 transition-colors duration-200
               focus:outline-none
               disabled:bg-neutral-30 disabled:text-neutral-60 disabled:cursor-not-allowed disabled:border-neutral-40
               ${icon && iconPosition === 'left' ? 'pl-10' : ''}
               ${icon && iconPosition === 'right' ? 'pr-10' : ''}
               ${error 
-                ? 'border-danger-main' 
-                : 'border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
+                ? 'border-2 border-danger-main' 
+                : 'border-2 border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
             `}
           />
           {icon && iconPosition === 'right' && (

@@ -12,39 +12,17 @@
   /* Jika perlu custom component classes, tambahkan di sini */
   /* Contoh: .btn-custom { @apply px-4 py-2 rounded-lg; } */
   
-  /* DatePicker Styles */
-  .react-datepicker {
-    font-family: inherit !important;
-    border-radius: 0.75rem !important;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08) !important;
-    border: none !important;
-  }
-  .react-datepicker__header {
-    background: #fff !important;
-    border-bottom: none !important;
-    border-radius: 0.75rem 0.75rem 0 0 !important;
-  }
-  .react-datepicker__day-names,
-  .react-datepicker__month,
-  .react-datepicker__week {
-    background: #fff !important;
-  }
-  .react-datepicker__day {
-    color: #262626 !important;
-    border-radius: 0.5rem !important;
-  }
-  .react-datepicker__day--selected,
-  .react-datepicker__day--keyboard-selected {
-    background: #14b8a6 !important;
-    color: #fff !important;
-    border-radius: 0.5rem !important;
-  }
-  .react-datepicker__day--today {
-    border: 1px solid #14b8a6 !important;
-  }
-  .react-datepicker__day--outside-month {
-    color: #a3a3a3 !important;
-  }
+    /* React Calendar Styles */
+    .react-calendar {
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .react-calendar__month-view {
+      border: none !important;
+    }
+    .react-calendar__tile {
+      border: none !important;
+    }
 }
 
 @layer utilities {
