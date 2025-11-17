@@ -35,9 +35,9 @@ export const LoginPage = () => {
             localStorage.setItem('auth_token', 'dummy-token-' + Date.now());
 
             if (user.role === UserRole.ADMIN) {
-                window.location.href = '/admin/dashboard';
+                window.location.href = '/admin';
             } else {
-                window.location.href = '/applicant/dashboard';
+                window.location.href = '/applicant';
             }
 
         } catch (err: unknown) {

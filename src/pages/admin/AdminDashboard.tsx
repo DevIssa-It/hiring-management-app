@@ -10,15 +10,17 @@ import { useNotification } from "@/context/NotificationContext";
 import { Notification } from "@/components/shared/Notification";
 import type { Job } from "@/types";
 import EmptyState from '@/assets/EmptyState.svg';
+import { useNavigate } from "react-router-dom";
 
 export const AdminDashboard = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const {jobs, isLoading: loading, createJob, updateJob} = useJobs();
     const { notifications, showNotification, removeNotification } = useNotification();
+    const navigate = useNavigate();
 
     const handleJobClick = (jobId: string) => {
-        console.log('Navigate to job: ', jobId);
+        navigate(`/admin/job/${jobId}/manage`);
     };
 
     const handleCreateJob = () => {

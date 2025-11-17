@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import { NotificationProvider } from './context/NotificationContext'
 import { LoginPage } from './pages/LoginPage'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
+import { ManageJob } from './pages/admin/ManageJob'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
 
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/job/:jobId/manage" element={<ManageJob />} />
 
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
