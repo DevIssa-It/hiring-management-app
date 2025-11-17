@@ -1,5 +1,3 @@
-// Table component with Tailwind CSS styling
-
 import type { TableColumn } from '@/types';
 
 export interface TableProps<T> {
@@ -32,22 +30,22 @@ export function Table<T extends { id?: string | number }>({
 
   return (
     <div className={`overflow-x-auto ${className}`}>
-      <table className="w-full border-collapse">
-        <thead className="bg-gray-50 border-b border-gray-200">
+      <table className="w-full border border-neutral-30 rounded-lg">
+        <thead className="bg-neutral-20 border-b border-neutral-40">
           <tr>
             {columns.map((col) => (
               <th
                 key={col.id}
                 onClick={() => col.sortable && onSort?.(col.id)}
                 className={`
-                  px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider
-                  ${col.sortable ? 'cursor-pointer hover:bg-gray-100' : ''}
+                  px-3 py-2 text-left text-xs font-bold text-neutral-100 whitespace-nowrap
+                  ${col.sortable ? 'cursor-pointer hover:bg-neutral-30' : ''}
                 `}
               >
                 <div className="flex items-center gap-2">
                   {col.label}
                   {col.sortable && sortBy === col.id && (
-                    <span className="text-primary-600">
+                    <span className="text-primary-main">
                       {sortOrder === 'asc' ? '↑' : '↓'}
                     </span>
                   )}
@@ -56,12 +54,12 @@ export function Table<T extends { id?: string | number }>({
             ))}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-neutral-30">
           {data.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-6 py-12 text-center text-gray-500"
+                className="px-3 py-12 text-center text-neutral-60"
               >
                 {emptyMessage}
               </td>
@@ -73,13 +71,13 @@ export function Table<T extends { id?: string | number }>({
                 onClick={() => onRowClick?.(row)}
                 className={`
                   transition-colors
-                  ${onRowClick ? 'hover:bg-gray-50 cursor-pointer' : ''}
+                  ${onRowClick ? 'hover:bg-neutral-30 cursor-pointer' : ''}
                 `}
               >
                 {columns.map((col) => (
                   <td
                     key={col.id}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                    className="px-3 py-2 whitespace-nowrap text-xs text-neutral-90"
                   >
                     {renderCell(row, col)}
                   </td>
