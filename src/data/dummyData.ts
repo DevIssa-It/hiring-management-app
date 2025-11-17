@@ -347,11 +347,126 @@ export const dummyApplication5: Application = {
 };
 
 export const dummyApplications = [
-  dummyApplication1,
-  dummyApplication2,
-  dummyApplication3,
-  dummyApplication4,
-  dummyApplication5,
+  // Job 1
+  {
+    id: 'app-1',
+    jobId: 'job-1',
+    applicantData: {
+      fullName: 'Aurelie Yukie',
+      email: 'aurelie@job.com',
+      phone: '021123098766',
+      gender: Gender.FEMALE,
+      domicile: 'Jakarta',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'submitted',
+    appliedAt: new Date('2024-11-02'),
+  },
+  {
+    id: 'app-2',
+    jobId: 'job-1',
+    applicantData: {
+      fullName: 'Dhyo Hendrawan',
+      email: 'dhyo@job.com',
+      phone: '081314807678',
+      gender: Gender.MALE,
+      domicile: 'Jakarta',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'accepted',
+    appliedAt: new Date('2024-11-03'),
+    reviewedAt: new Date('2024-11-04'),
+  },
+  // Job 2
+  {
+    id: 'app-3',
+    jobId: 'job-2',
+    applicantData: {
+      fullName: 'Indra Zen',
+      email: 'indrazen@job.com',
+      phone: '081118360668',
+      gender: Gender.MALE,
+      domicile: 'Jakarta',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'submitted',
+    appliedAt: new Date('2024-11-06'),
+  },
+  {
+    id: 'app-4',
+    jobId: 'job-2',
+    applicantData: {
+      fullName: 'Ella',
+      email: 'ella@job.com',
+      phone: '081234567890',
+      gender: Gender.FEMALE,
+      domicile: 'Bandung',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'rejected',
+    appliedAt: new Date('2024-11-07'),
+    reviewedAt: new Date('2024-11-09'),
+  },
+  // Job 3
+  {
+    id: 'app-5',
+    jobId: 'job-3',
+    applicantData: {
+      fullName: 'Marvin',
+      email: 'marvin@job.com',
+      phone: '081234567891',
+      gender: Gender.MALE,
+      domicile: 'Yogyakarta',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'submitted',
+    appliedAt: new Date('2024-11-11'),
+  },
+  {
+    id: 'app-6',
+    jobId: 'job-3',
+    applicantData: {
+      fullName: 'Shanna',
+      email: 'shanna@job.com',
+      phone: '081234567892',
+      gender: Gender.FEMALE,
+      domicile: 'Jakarta',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'accepted',
+    appliedAt: new Date('2024-11-12'),
+    reviewedAt: new Date('2024-11-13'),
+  },
+  // Job 4
+  {
+    id: 'app-7',
+    jobId: 'job-4',
+    applicantData: {
+      fullName: 'Gal',
+      email: 'gal@job.com',
+      phone: '088312345678',
+      gender: Gender.MALE,
+      domicile: 'Surabaya',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'submitted',
+    appliedAt: new Date('2024-11-14'),
+  },
+  // Job 5
+  {
+    id: 'app-8',
+    jobId: 'job-5',
+    applicantData: {
+      fullName: 'Granville',
+      email: 'granville@job.com',
+      phone: '083812975679',
+      gender: Gender.MALE,
+      domicile: 'Jakarta',
+      dateOfBirth: new Date('2000-01-01'),
+    },
+    status: 'reviewed',
+    appliedAt: new Date('2024-11-15'),
+  },
 ];
 
 // ==================== HELPER FUNCTIONS ====================
