@@ -57,6 +57,8 @@ interface Job {
   title: string;
   description: string;
   department: string;
+  companyName: string;
+  logoUrl?: string;
   location: string;
   employmentType: EmploymentType;
   salaryMin?: number;
@@ -117,6 +119,8 @@ export const dummyJob1: Job = {
   title: 'Senior Frontend Developer',
   description: 'We are looking for an experienced Frontend Developer to join our team. You will be responsible for building the client-side of our web applications using modern frameworks like React and TypeScript.',
   department: 'Engineering',
+  companyName: 'TechCorp Indonesia',
+  logoUrl: '/assets/Logo.png',
   location: 'Jakarta, Indonesia',
   employmentType: EmploymentType.FULL_TIME,
   salaryMin: 15000000,
@@ -144,9 +148,11 @@ export const dummyJob1: Job = {
 
 export const dummyJob2: Job = {
   id: 'job-2',
-  title: 'Backend Engineer - Node.js',
+  title: 'Backend Engineer',
   description: 'Join our backend team to build scalable microservices using Node.js and TypeScript. You will work on designing APIs, database optimization, and cloud infrastructure.',
   department: 'Engineering',
+  companyName: 'DataFlow Systems',
+  logoUrl: '/assets/Logo.png',
   location: 'Bandung, Indonesia',
   employmentType: EmploymentType.FULL_TIME,
   salaryMin: 12000000,
@@ -174,9 +180,11 @@ export const dummyJob2: Job = {
 
 export const dummyJob3: Job = {
   id: 'job-3',
-  title: 'UI/UX Designer Intern',
+  title: 'UI/UX Designer',
   description: 'Looking for a creative intern to help design user interfaces and improve user experience. Great opportunity to learn and grow in a fast-paced startup environment.',
   department: 'Design',
+  companyName: 'Creative Studio',
+  logoUrl: '/assets/Logo.png',
   location: 'Remote',
   employmentType: EmploymentType.INTERN,
   status: JobStatus.ACTIVE,
@@ -205,6 +213,8 @@ export const dummyJob4: Job = {
   title: 'DevOps Engineer',
   description: 'We need a DevOps engineer to manage our cloud infrastructure, CI/CD pipelines, and monitoring systems.',
   department: 'Engineering',
+  companyName: 'CloudTech Solutions',
+  logoUrl: '/assets/Logo.png',
   location: 'Surabaya, Indonesia',
   employmentType: EmploymentType.CONTRACT,
   salaryMin: 18000000,
@@ -235,6 +245,8 @@ export const dummyJob5: Job = {
   title: 'Product Manager',
   description: 'Lead product strategy and roadmap for our SaaS platform. Work closely with engineering and design teams.',
   department: 'Product',
+  companyName: 'InnovateLab',
+  logoUrl: '/assets/Logo.png',
   location: 'Jakarta, Indonesia',
   employmentType: EmploymentType.FULL_TIME,
   salaryMin: 20000000,
