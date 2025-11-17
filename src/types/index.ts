@@ -69,6 +69,8 @@ export interface Job {
   title: string;
   description: string;
   department: string;
+  companyName: string;
+  logoUrl?: string;
   location: string;
   employmentType: EmploymentType;
   salaryMin?: number;

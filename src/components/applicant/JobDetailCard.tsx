@@ -1,0 +1,58 @@
+import type { Job } from '@/types';
+import Logo1 from '@/assets/Logo1.svg';
+import { Badge } from '@/components/shared/Badge';
+import { Button } from '@/components/shared/Button';
+import { HiOutlineLocationMarker, HiOutlineBriefcase } from 'react-icons/hi';
+import { HiOutlineBanknotes } from 'react-icons/hi2';
+
+interface JobDetailCardProps {
+  job: Job;
+  showApplyButton?: boolean;
+  onApply?: () => void;
+}
+
+export const JobDetailCard: React.FC<JobDetailCardProps> = ({ 
+  job, 
+  showApplyButton = false, 
+  onApply 
+}) => {
+  return (
+    <div className="bg-neutral-10 rounded-lg border border-neutral-40 shadow-soft p-8">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-12 h-12 rounded-lg bg-neutral-40 flex items-center justify-center p-2">
+          <img 
+            src={job.logoUrl || Logo1} 
+            alt="Company Logo" 
+            className="w-full h-full object-contain"
+          />
+        </div>
+        <div className="flex-1">
+          <div className="mb-1">
+            <Badge 
+              variant="custom"
+              className="bg-success-main text-white text-xs font-bold border-success-main rounded-md">
+              {job.employmentType.replace('_', '-').toUpperCase()}
+            </Badge>
+          </div>
+          <div className="font-semibold text-lg text-neutral-100">{job.title}</div>
+          <div className="text-neutral-70">{job.companyName}</div>
+        </div>
+        {showApplyButton && (
+          <Button 
+            onClick={onApply}
+            variant="alternative"
+            className="w-20 h-8"
+          >
+            Apply
+          </Button>
+        )}
+      </div>
+      
+      <hr className="border-neutral-40 my-4" />
+      
+      <div className="text-neutral-80 whitespace-pre-line">
+        {job.description}
+      </div>
+    </div>
+  );
+};
