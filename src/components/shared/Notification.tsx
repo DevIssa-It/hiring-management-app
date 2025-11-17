@@ -1,5 +1,3 @@
-// Notification/Toast component with Tailwind CSS styling
-
 import type { Notification as NotificationType } from '@/types';
 import { useEffect } from 'react';
 
@@ -11,17 +9,45 @@ export interface NotificationProps {
 }
 
 const notificationStyles = {
-  success: 'bg-success-50 border-success-500 text-success-800',
-  error: 'bg-danger-50 border-danger-500 text-danger-800',
-  warning: 'bg-warning-50 border-warning-500 text-warning-800',
-  info: 'bg-primary-50 border-primary-500 text-primary-800',
+  success: {
+    border: 'border-l-success-main',
+    icon: 'text-success-main border-success-main',
+  },
+  error: {
+    border: 'border-l-danger-main',
+    icon: 'text-danger-main border-danger-main',
+  },
+  warning: {
+    border: 'border-l-warning-main',
+    icon: 'text-warning-main border-warning-main',
+  },
+  info: {
+    border: 'border-l-primary-main',
+    icon: 'text-primary-main border-primary-main',
+  },
 };
 
 const iconStyles = {
-  success: '✓',
-  error: '✕',
-  warning: '⚠',
-  info: 'ℹ',
+  success: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+    </svg>
+  ),
+  error: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  ),
+  warning: (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+    </svg>
+  ),
+  info: (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+    </svg>
+  ),
 };
 
 export const Notification: React.FC<NotificationProps> = ({ 
@@ -40,29 +66,31 @@ export const Notification: React.FC<NotificationProps> = ({
     }
   }, [autoClose, duration, notification.id, onClose]);
 
+  const styles = notificationStyles[notification.type];
+
   return (
     <div
       className={`
-        flex items-start gap-3 p-4 rounded-lg border-l-4 shadow-lg
+        flex items-center gap-3 px-4 py-3 rounded-lg border-l-4 shadow-lg
+        bg-white border ${styles.border}
         animate-slide-in-right max-w-md w-full
-        ${notificationStyles[notification.type]}
       `}
       role="alert"
     >
-      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-white flex items-center justify-center font-bold">
+      {/* Icon dalam Lingkaran dengan Border */}
+      <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${styles.icon}`}>
         {iconStyles[notification.type]}
       </div>
       
-      <div className="flex-1 min-w-0">
-        {notification.title && (
-          <h4 className="font-semibold mb-1">{notification.title}</h4>
-        )}
-        <p className="text-sm">{notification.message}</p>
-      </div>
+      {/* Message - Single Line */}
+      <p className="flex-1 text-sm text-neutral-90">
+        {notification.message}
+      </p>
       
+      {/* Close button */}
       <button
         onClick={() => onClose(notification.id)}
-        className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+        className="flex-shrink-0 text-neutral-60 hover:text-neutral-90 transition-colors"
         aria-label="Close notification"
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

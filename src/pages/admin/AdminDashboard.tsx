@@ -14,7 +14,7 @@ import EmptyState from '@/assets/EmptyState.svg';
 export const AdminDashboard = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const {jobs, isLoading: loading, createJob} = useJobs();
+    const {jobs, isLoading: loading, createJob, updateJob} = useJobs();
     const { notifications, showNotification, removeNotification } = useNotification();
 
     const handleJobClick = (jobId: string) => {
@@ -48,6 +48,25 @@ export const AdminDashboard = () => {
         }
     }
 
+    const handleStatusChange = async (jobId: string, status: 'active' | 'inactive') => {
+        try {
+            await updateJob(jobId, { status });
+            showNotification(
+                'success',
+                'Success!',
+                `Job marked as ${status}`,
+                3000
+            );
+        } catch (error) {
+            showNotification(
+                'error',
+                'Error!',
+                'Failed to update job status',
+                3000
+            );
+        }
+    };
+
     const filteredJobs = jobs.filter(job =>
         job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         job.department.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,7 +74,7 @@ export const AdminDashboard = () => {
 
     return (
         <div id="admin-dashobard" className="min-h-screen bg-neutral-10">
-            <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+            <div className="fixed bottom-4 left-4 z-50 flex flex-col gap-2 bg-white">
                 {notifications.map((notification) => (
                     <Notification
                         key={notification.id}
@@ -117,6 +136,7 @@ export const AdminDashboard = () => {
                             <JobList
                                 jobs={filteredJobs}
                                 onJobClick={handleJobClick}
+                                onStatusChange={handleStatusChange}
                             />
                         )}
                     </div>

@@ -27,13 +27,16 @@ export const JobFormConfig: React.FC<JobFormConfigProps> = ({ configuration, onC
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 border border-neutral-40 rounded-lg p-4 bg-neutral-10">
+      <h3 className="text-base font-semibold text-neutral-90 mb-4">
+        Minimum Profile Information Required
+      </h3>
       {FORM_FIELDS.map((field) => (
         <div 
           key={field.key} 
           className="flex items-center justify-between py-3 border-b border-neutral-40 last:border-0"
         >
-          <label className="text-sm font-medium text-neutral-90">{field.label}</label>
+          <label className="text-sm font-base text-neutral-90">{field.label}</label>
           
           <div className="flex items-center gap-3">
             {/* Mandatory Button */}
@@ -66,7 +69,6 @@ export const JobFormConfig: React.FC<JobFormConfigProps> = ({ configuration, onC
               Optional
             </button>
 
-            {/* Off Button */}
             <button
               type="button"
               onClick={() => handleFieldChange(field.key, FieldRequirement.OFF)}

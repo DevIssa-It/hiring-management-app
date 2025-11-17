@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { JobListItem } from '@/types';
 import { Badge } from '@/components/shared/Badge';
 import { Button } from "@/components/shared/Button";
@@ -11,6 +11,24 @@ export interface JobCardProps {
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onClick, onStatusChange }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown saat klik di luar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMenu]);
 
   const formatSalary = (min?:number, max?: number) => {
     if (!min || !max) return 'Salary not specified';
@@ -31,7 +49,8 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, onStatusChange }
 
   return (
     <div id="JobCard" className="bg-white rounded-lg border border-neutral-40 p-4 hover:shadow-md transition-shadow relative">
-      <div className="absolute top-4 right-4">
+      {/* Menu Dropdown */}
+      <div className="absolute top-4 right-4" ref={menuRef}>
         <button
           onClick={() => setShowMenu(!showMenu)}
           className="text-neutral-70 hover:text-neutral-100 p-1"

@@ -299,6 +299,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               label="Minimum Estimated Salary"
               type="number"
               placeholder="Ex : Rp7.500.000"
+              prefix="Rp"
               value={formData.minSalary.toString()}
               onChange={(val) => setFormData({ ...formData, minSalary: parseInt(val) || 0 })}
             />
@@ -306,6 +307,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               label="Maximum Estimated Salary"
               type="number"
               placeholder="Ex : 10.000.000"
+              prefix="Rp"
               value={formData.maxSalary.toString()}
               onChange={(val) => setFormData({ ...formData, maxSalary: parseInt(val) || 0 })}
             />
@@ -313,9 +315,6 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
         </div>
 
         <div id="form-configuration">
-          <h3 className="text-base font-semibold text-neutral-90 mb-4">
-            Minimum Profile Information
-          </h3>
           <JobFormConfig
             configuration={formConfig}
             onChange={setFormConfig}
