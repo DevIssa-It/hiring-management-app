@@ -19,16 +19,11 @@ export const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) 
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-
-  console.log('ProtectedRoute - User:', user);
-  console.log('ProtectedRoute - Required role:', requiredRole);
-  console.log('ProtectedRoute - User role:', user?.role);
-  console.log('ProtectedRoute - Role match:', user?.role === requiredRole);
   
-  if (requiredRole && user?.role !== requiredRole) {
+  if (requiredRole && user.role !== requiredRole) {
     return <Navigate to="/unauthorized" replace />;
   }
 

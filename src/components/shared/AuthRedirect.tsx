@@ -8,27 +8,32 @@ export const AuthRedirect = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated && user) {
-      console.log('AuthRedirect - User:', user);
+    // Tunggu sampai loading selesai
+    if (isLoading) return;
+
+    if (isAuthenticated && user) {
+      console.log('AuthRedirect - User authenticated:', user);
       console.log('AuthRedirect - User role:', user.role);
-      console.log('AuthRedirect - UserRole.ADMIN:', UserRole.ADMIN);
-      console.log('AuthRedirect - Role comparison:', user.role === UserRole.ADMIN);
       
       const targetPath = user.role === UserRole.ADMIN ? '/admin' : '/applicant';
-      console.log('AuthRedirect - Target path:', targetPath);
-      navigate(targetPath, { replace: true });
-    } else if (!isLoading && !isAuthenticated) {
+      console.log('AuthRedirect - Redirecting to:', targetPath);
+      
+      // Gunakan timeout kecil untuk memastikan state sudah stabil
+      setTimeout(() => {
+        navigate(targetPath, { replace: true });
+      }, 100);
+    } else {
+      console.log('AuthRedirect - Not authenticated, redirecting to login');
       navigate('/login', { replace: true });
     }
   }, [isAuthenticated, user, isLoading, navigate]);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+  // Tampilkan loading saat masih memuat
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-lg">
+        {isLoading ? 'Loading...' : 'Redirecting...'}
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 };

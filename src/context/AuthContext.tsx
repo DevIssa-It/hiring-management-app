@@ -7,7 +7,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   register: (email: string, password: string, role: UserRole, name: string) => Promise<void>;
 }
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         authService.initializeAuth();
         const response = await authService.getCurrentUser();
-        if (response.data) {
+        if (response.success && response.data) {
           setUser(response.data);
         }
       } catch (error) {
@@ -41,9 +41,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     try {
       const response = await authService.login(email, password);
-      if (response.data) {
+      if (response.success && response.data) {
         setUser(response.data.user);
+        return response.data.user;
+      } else {
+        throw new Error(response.error || 'Login failed');
       }
+    } catch (error) {
+      setIsLoading(false);
+      throw error;
     } finally {
       setIsLoading(false);
     }

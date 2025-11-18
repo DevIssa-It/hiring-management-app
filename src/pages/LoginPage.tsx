@@ -19,22 +19,28 @@ export const LoginPage = () => {
     
     const from = location.state?.from?.pathname || '/';
     
+    // Redirect jika sudah login saat pertama kali load halaman
     useEffect(() => {
-        if (isAuthenticated && user) {
+        if (!isLoading && isAuthenticated && user) {
             if (from !== '/') {
                 navigate(from, { replace: true });
             } else {
                 navigate(user.role === UserRole.ADMIN ? '/admin' : '/applicant', { replace: true });
             }
         }
-    }, [isAuthenticated, user, navigate, from]);
+    }, [isLoading]); // Hanya trigger saat loading selesai
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         
         try {
-            await login(email, password);
+            const loggedInUser = await login(email, password);
+            // Navigasi langsung setelah login berhasil
+            if (loggedInUser) {
+                const targetPath = loggedInUser.role === UserRole.ADMIN ? '/admin' : '/applicant';
+                navigate(targetPath, { replace: true });
+            }
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Email atau password salah.');
         }

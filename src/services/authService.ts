@@ -39,31 +39,47 @@ const ensureAdminUser = async (email: string) => {
 export const authService = {
   async login(email: string, password: string): Promise<ApiResponse<LoginResponse>> {
     try {
+      console.log('Login attempt for:', email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase auth error:', error);
+        throw error;
+      }
 
+      if (!data.user) {
+        throw new Error('No user data returned from authentication');
+      }
+
+      // Pastikan user profile ada di database
       let userProfile = await ensureAdminUser(email);
       if (!userProfile) {
         userProfile = await usersService.getUserByEmail(email);
       }
+      
       console.log('Login - User profile from DB:', userProfile);
+      
+      // Pastikan role valid
+      const userRole = userProfile?.role === 'admin' ? UserRole.ADMIN : UserRole.APPLICANT;
       
       const user: User = {
         id: data.user.id,
         email: data.user.email!,
-        role: (userProfile?.role as UserRole) || UserRole.APPLICANT,
+        role: userRole,
         createdAt: new Date(data.user.created_at),
         updatedAt: new Date(data.user.updated_at || data.user.created_at)
       };
       
       console.log('Login - Final user object:', user);
+      console.log('Login - User role set to:', user.role);
 
       return { success: true, data: { user } };
     } catch (error: any) {
+      console.error('Login error:', error);
       return { success: false, error: error.message };
     }
   },
@@ -115,24 +131,31 @@ export const authService = {
       if (error) throw error;
       if (!user) return { success: false, error: 'No user found' };
 
+      // Pastikan user profile ada di database
       let userProfile = await ensureAdminUser(user.email!);
       if (!userProfile) {
         userProfile = await usersService.getUserByEmail(user.email!);
       }
+      
       console.log('getCurrentUser - User profile from DB:', userProfile);
+      
+      // Pastikan role valid
+      const userRole = userProfile?.role === 'admin' ? UserRole.ADMIN : UserRole.APPLICANT;
       
       const userData: User = {
         id: user.id,
         email: user.email!,
-        role: (userProfile?.role as UserRole) || UserRole.APPLICANT,
+        role: userRole,
         createdAt: new Date(user.created_at),
         updatedAt: new Date(user.updated_at || user.created_at)
       };
       
       console.log('getCurrentUser - Final user object:', userData);
+      console.log('getCurrentUser - User role set to:', userData.role);
 
       return { success: true, data: userData };
     } catch (error: any) {
+      console.error('getCurrentUser error:', error);
       return { success: false, error: error.message };
     }
   },

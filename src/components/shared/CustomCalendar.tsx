@@ -82,7 +82,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-neutral-90 mb-2">
+        <label className="block text-sm font-medium text-neutral-100 mb-2">
           {label}
           {required && <span className="text-danger-main ml-1">*</span>}
         </label>
@@ -98,7 +98,13 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
           readOnly
           onClick={() => setShowCalendar((v) => !v)}
           placeholder="Select date"
-          className={`w-full pl-10 pr-3 py-2 border rounded-lg text-neutral-90 bg-white focus:outline-none focus:ring-2 focus:ring-primary-focus focus:border-primary-main cursor-pointer ${error ? 'border-danger-main' : 'border-neutral-40'}`}
+          className={`
+            w-full pl-10 pr-3 py-2 border-2 rounded-lg text-neutral-100 placeholder:text-neutral-70 bg-white cursor-pointer transition-colors duration-200
+            focus:outline-none
+            ${error 
+              ? 'border-2 border-danger-main' 
+              : 'border-2 border-neutral-40 focus:border-primary-main focus:ring-2 focus:ring-primary-focus'}
+          `}
         />
         {showCalendar && (
           <div

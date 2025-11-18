@@ -151,6 +151,10 @@ export const Resume: React.FC = function Resume() {
       newErrors.fullName = 'Full name is required';
     }
     
+    if (!formData.dateOfBirth) {
+      newErrors.dateOfBirth = 'Date of birth is required';
+    }
+    
     if (!formData.email?.trim()) {
       newErrors.email = 'Email is required';
     } else if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
@@ -329,7 +333,12 @@ export const Resume: React.FC = function Resume() {
                 <CustomCalendar
                   label="Date of Birth"
                   value={formData.dateOfBirth || null}
-                  onChange={(date) => setFormData(prev => ({ ...prev, dateOfBirth: date || undefined }))}
+                  onChange={(date) => {
+                    setFormData(prev => ({ ...prev, dateOfBirth: date || undefined }));
+                    if (errors.dateOfBirth) {
+                      setErrors(prev => ({ ...prev, dateOfBirth: '' }));
+                    }
+                  }}
                   placeholder="Select date of birth"
                   required
                   error={errors.dateOfBirth}
