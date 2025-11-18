@@ -10,6 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useNotification } from '@/context/NotificationContext';
 import { usersService, applicationsService, jobsService } from '@/services/supabaseService';
 import { LoadingSpinner, InlineSpinner } from '@/components/shared/LoadingSpinner';
+import { SuccessModal } from '@/components/shared/SuccessModal';
 // Mock job data
 const mockJob = {
   id: '1',
@@ -152,6 +153,7 @@ export const Resume: React.FC = function Resume() {
     profilePicture: '',
   });
   const [showWebcam, setShowWebcam] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -291,12 +293,7 @@ export const Resume: React.FC = function Resume() {
         localStorage.setItem('appliedJobs', JSON.stringify(appliedJobs));
       }
       
-      showNotification(
-        'success',
-        'Application Submitted',
-        'Your application has been submitted successfully!'
-      );
-      navigate('/applicant/success');
+      setShowSuccessModal(true);
     } catch (error) {
       showNotification(
         'error',
@@ -638,6 +635,15 @@ export const Resume: React.FC = function Resume() {
           />
         </Modal>
       )}
+
+      {/* Success Modal */}
+      <SuccessModal 
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false);
+          navigate('/applicant');
+        }}
+      />
     </div>
   );
 };
