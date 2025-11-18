@@ -1,75 +1,92 @@
 # Hiring Management App
 
-A modern hiring management application built with React, TypeScript, and Supabase.
+## Project Overview
 
-## 🚀 Features
+A comprehensive hiring management application that streamlines the recruitment process for companies and job seekers. The system features role-based access control with separate interfaces for administrators and applicants.
 
-- **Authentication System**: Secure login/logout with role-based access
-- **Admin Dashboard**: Manage job postings and view applications
-- **Applicant Portal**: Browse jobs and submit applications
-- **Real-time Data**: Powered by Supabase for live updates
-- **File Upload**: Resume and profile picture uploads
-- **Responsive Design**: Works on desktop and mobile
+### Key Features
+- **Admin Dashboard**: Create and manage job postings, review applications, track candidates
+- **Applicant Portal**: Browse available positions, submit applications with resume upload
+- **Real-time Updates**: Live status tracking for applications
+- **Secure Authentication**: Role-based access with Supabase Auth
+- **Responsive Design**: Mobile-friendly interface with Tailwind CSS
 
-## 🛠️ Tech Stack
+## Tech Stack Used
 
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Supabase (Database, Auth, Storage)
-- **Build Tool**: Vite
-- **Icons**: React Icons
-- **Routing**: React Router DOM
+### Frontend
+- **React 18** with TypeScript for type safety
+- **Vite** for fast development and building
+- **Tailwind CSS** for responsive styling
+- **React Router DOM** for client-side routing
+- **React Icons** for consistent iconography
 
-## 📦 Installation
+### Backend & Database
+- **Supabase** (PostgreSQL) for database and real-time features
+- **Supabase Auth** for authentication and authorization
+- **Row Level Security (RLS)** for data protection
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd hiring-management-app
-   ```
+### Development & Testing
+- **Vitest** for unit testing
+- **React Testing Library** for component testing
+- **ESLint** for code linting
+- **TypeScript** for static type checking
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-3. **Setup environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   Fill in your Supabase credentials in `.env`
+- Node.js (v18 or higher)
+- npm or yarn
+- Supabase account
 
-4. **Setup database**
-   ```bash
-   # Run database setup (tables, seed data)
-   psql -f database/setup.sql
-   
-   # Setup storage buckets
-   psql -f database/setup-storage.sql
-   
-   # Setup authentication users
-   psql -f database/setup-auth-users.sql
-   ```
+## How to Run Locally
 
-5. **Start development server**
-   ```bash
-   npm run dev
-   ```
+### 1. Clone and Install
+```bash
+git clone <repository-url>
+cd hiring-management-app
+npm install
+```
 
-## 🔐 Demo Credentials
+### 2. Environment Setup
+```bash
+cp .env.example .env
+```
 
-Use these credentials to test the application:
+Add your Supabase credentials to `.env`:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-### Admin Access
-- Email: `admin@rakamin.com`
-- Password: `admin123`
-- Access: Job management, view applications
+### 3. Start Development Server
+```bash
+npm run dev
+```
 
-### Applicant Access
-- Email: `john.doe@example.com`
-- Password: `user123`
-- Access: Browse jobs, submit applications
+Application will be available at `http://localhost:5173`
 
-## 📁 Project Structure
+### 5. Testing
+```bash
+# Run all tests
+npm test
+
+# Run tests once
+npm run test:run
+
+# Run with coverage
+npm test -- --coverage
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+
+
+## Project Structure
 
 ```
 src/
@@ -77,42 +94,42 @@ src/
 │   ├── admin/          # Admin-specific components
 │   ├── applicant/      # Applicant-specific components
 │   └── shared/         # Shared components
-├── context/            # React contexts
-├── hooks/              # Custom React hooks
 ├── pages/              # Page components
-├── services/           # API services
+├── hooks/              # Custom React hooks
+├── services/           # API and external services
+├── context/            # React context providers
 ├── types/              # TypeScript type definitions
 └── utils/              # Utility functions
 ```
 
-## 🔧 Available Scripts
+## Default Users
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+**Admin Account:**
+- Email: `admin@rakamin.com`
+- Password: `admin123`
 
-## 🧪 Testing
+**Applicant Account:**
+- Email: `john.doe@example.com`
+- Password: `applicant123`
 
-Run integration tests:
-```bash
-node database/test-complete-integration.js
-```
+## Troubleshooting
 
-## 📚 Documentation
+### Common Issues
 
-- [Authentication System](./AUTHENTICATION_SYSTEM.md)
-- [Supabase Integration](./SUPABASE_INTEGRATION_COMPLETE.md)
-- [API Specification](./API_SPEC.md)
+1. **Supabase Connection Error**
+   - Verify your `.env` file has correct credentials
+   - Check if Supabase project is active
 
-## 🤝 Contributing
+2. **Build Errors**
+   - Clear node_modules: `rm -rf node_modules && npm install`
+   - Check TypeScript errors: `npm run build`
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests
-5. Submit a pull request
+3. **Test Failures**
+   - Ensure all dependencies are installed
+   - Run `npm run test:run` for detailed output
 
-## 📄 License
+### Getting Help
 
-This project is licensed under the MIT License.
+- Check the browser console for errors
+- Review Supabase dashboard for database issues
+- Verify your environment variables are correct
