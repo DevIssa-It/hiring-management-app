@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 export const AdminDashboard = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const {jobs, isLoading: loading, createJob, updateJob} = useJobs();
+    const {jobs, isLoading: loading, error, createJob, updateJob} = useJobs();
     const { notifications, showNotification, removeNotification } = useNotification();
     const navigate = useNavigate();
 
@@ -27,9 +27,23 @@ export const AdminDashboard = () => {
         setIsCreateModalOpen(true);
     }
 
-    const handleSubmitJob = async (jobData: Partial<Job>) => {
+    const handleSubmitJob = async (jobData: any) => {
         try {
-            await createJob(jobData);
+            console.log('handleSubmitJob received:', jobData);
+            
+            const mappedData = {
+                title: jobData.title,
+                description: jobData.description,
+                location: 'Jakarta', // Default location
+                employmentType: jobData.type || 'full_time', // Use 'type' from modal
+                salaryMin: jobData.salaryRange?.min || 0,
+                salaryMax: jobData.salaryRange?.max || 0,
+                status: jobData.status || 'active'
+            };
+            
+            console.log('Mapped data for createJob:', mappedData);
+            
+            await createJob(mappedData);
             setIsCreateModalOpen(false);
             
             // Tampilkan notification success
@@ -90,7 +104,6 @@ export const AdminDashboard = () => {
                 <Navbar
                     title="Job List"
                     avatarText="A"
-                    onAvatarClick={() => console.log('Profile clicked')}
                 />
 
                 <div id="header" className="flex gap-6 mb-6">
@@ -107,6 +120,10 @@ export const AdminDashboard = () => {
                         {loading ? (
                             <div className="flex justify-center items-center py-20">
                                 <div className="text-neutral-60">Loading Jobs...</div>
+                            </div>
+                        ) : error ? (
+                            <div className="flex justify-center items-center py-20">
+                                <div className="text-red-600">Error: {error}</div>
                             </div>
                         ) : filteredJobs.length === 0 ?(
                             <div className="flex flex-col justify-center items-center py-16">

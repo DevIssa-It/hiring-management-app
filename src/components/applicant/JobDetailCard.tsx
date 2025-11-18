@@ -9,12 +9,14 @@ interface JobDetailCardProps {
   job: Job;
   showApplyButton?: boolean;
   onApply?: () => void;
+  isApplied?: boolean;
 }
 
 export const JobDetailCard: React.FC<JobDetailCardProps> = ({ 
   job, 
   showApplyButton = false, 
-  onApply 
+  onApply,
+  isApplied = false
 }) => {
   return (
     <div className="bg-neutral-10 rounded-lg border border-neutral-40 shadow-soft p-8">
@@ -31,7 +33,7 @@ export const JobDetailCard: React.FC<JobDetailCardProps> = ({
             <Badge 
               variant="custom"
               className="bg-success-main text-white text-xs font-bold border-success-main rounded-md">
-              {job.employmentType.replace('_', '-').toUpperCase()}
+              {job.employmentType ? job.employmentType.replace('_', '-').toUpperCase() : 'FULL-TIME'}
             </Badge>
           </div>
           <div className="font-semibold text-lg text-neutral-100">{job.title}</div>
@@ -39,11 +41,12 @@ export const JobDetailCard: React.FC<JobDetailCardProps> = ({
         </div>
         {showApplyButton && (
           <Button 
-            onClick={onApply}
-            variant="alternative"
+            onClick={isApplied ? undefined : onApply}
+            variant={isApplied ? "neutral" : "alternative"}
             className="w-20 h-8"
+            disabled={isApplied}
           >
-            Apply
+            {isApplied ? 'Applied' : 'Apply'}
           </Button>
         )}
       </div>

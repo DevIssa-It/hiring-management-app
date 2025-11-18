@@ -1,138 +1,122 @@
 import { useState, useEffect } from 'react';
-import type { Job, JobListItem } from '@/types';
-import { JobStatus } from '@/types';
-import { dummyJobs } from '@/data/dummyData';
+import { jobsService, companiesService } from '@/services/supabaseService';
+import { supabase } from '@/lib/supabase';
+import type { JobListItem } from '@/types';
 
 export const useJobs = () => {
   const [jobs, setJobs] = useState<JobListItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const convertToJobListItem = (job: Job): JobListItem => ({
-    id: job.id,
-    title: job.title,
-    department: job.department,
-    status: job.status,
-    salaryMin: job.salaryMin,
-    salaryMax: job.salaryMax,
-    applicantsCount: 0,
-    createdAt: job.createdAt,
-  })
-
-  const fetchJobs = async (filters?: Record<string, string>) => {
+  const fetchJobs = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      let filteredJobs = [...dummyJobs];
-
-      if (filters?.status) {
-        filteredJobs = filteredJobs.filter(
-          job => job.status === filters.status
-        );
-      }
-
-      if (filters?.search) {
-        const searchLower = filters.search.toLowerCase();
-        filteredJobs = filteredJobs.filter(
-          job =>
-            job.title.toLowerCase().includes(searchLower) ||
-            job.department.toLowerCase().includes(searchLower) ||
-            job.location.toLowerCase().includes(searchLower)
-        )
-      }
-
-      const jobListItems = filteredJobs.map(convertToJobListItem);
-
-      setJobs(jobListItems);
+      console.log('Fetching jobs from Supabase...');
+      console.log('Calling getAllJobs...');
+      const jobsData = await jobsService.getAllJobs();
+      console.log('Jobs data received:', jobsData);
+      console.log('Jobs count:', jobsData?.length || 0);
+      
+      const formattedJobs: JobListItem[] = jobsData.map(job => ({
+        id: job.id,
+        title: job.title,
+        department: job.department || 'Engineering',
+        status: job.status as any,
+        salaryMin: job.salaryMin || 0,
+        salaryMax: job.salaryMax || 0,
+        applicantsCount: 0, // TODO: Get from applications count
+        createdAt: job.createdAt || new Date(),
+      }));
+      
+      setJobs(formattedJobs);
     } catch (err) {
+      console.error('Error fetching jobs:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch jobs');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const createJob = async (data: Partial<Job>) => {
+  const createJob = async (data: {
+    title: string;
+    description: string;
+    location?: string;
+    employmentType?: string;
+    salaryMin?: number;
+    salaryMax?: number;
+    status?: string;
+  }) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      console.log('Creating job:', data);
+      
+      // Get first company as default or create one
+      let companies = await companiesService.getAllCompanies();
+      let defaultCompanyId = companies[0]?.id;
+      
+      if (!defaultCompanyId) {
+        console.log('No company found, creating default company...');
+        // Create default company if none exists
+        const { data: newCompany, error } = await supabase
+          .from('companies')
+          .insert({ name: 'Default Company', logo_url: null })
+          .select()
+          .single();
+        
+        if (error) {
+          console.error('Failed to create default company:', error);
+          throw new Error('Failed to create company');
+        }
+        
+        defaultCompanyId = newCompany.id;
+        console.log('Created default company:', newCompany);
+      }
 
-      const newJob: Job = {
-        id: `job-${Date.now()}`,
-        title: data.title || '',
-        description: data.description || '',
-        department: data.department || '',
-        location: data.location || '',
-        employmentType: data.employmentType || '',
+      console.log('Creating job with data:', {
+        title: data.title,
+        description: data.description,
+        companyId: defaultCompanyId,
+        location: data.location || 'Jakarta',
+        employmentType: data.employmentType || 'full_time',
         salaryMin: data.salaryMin,
         salaryMax: data.salaryMax,
-        status: data.status || JobStatus.DRAFT,
-        formConfiguration: data.formConfiguration!,
-        createdBy: 'admin-1',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-
-      dummyJobs.push(newJob);
-
-      await fetchJobs();
-
-      return newJob;
+        status: data.status || 'active'
+      });
+      
+      await jobsService.createJob({
+        title: data.title,
+        description: data.description,
+        companyId: defaultCompanyId,
+        location: data.location || 'Jakarta',
+        employmentType: data.employmentType || 'full_time',
+        salaryMin: data.salaryMin,
+        salaryMax: data.salaryMax,
+        status: data.status || 'active'
+      });
+      
+      await fetchJobs(); // Refresh jobs list
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to Created job');
-      throw err;
-    } finally {
-      setIsLoading(false)
-    }
-  };
-
-  const updateJob = async (id: string, data: Partial<Job>) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const jobIndex = dummyJobs.findIndex(job => job.id === id);
-
-      if (jobIndex === -1) {
-        throw new Error('Job not found');
-      }
-
-      dummyJobs[jobIndex] = {
-        ...dummyJobs[jobIndex],
-        ...data,
-        updatedAt: new Date(),
-      };
-        await fetchJobs();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update job');
+      console.error('Error creating job:', err);
+      setError(err instanceof Error ? err.message : 'Failed to create job');
       throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const deleteJob = async (id: string) => {
+  const updateJob = async (id: string, data: any) => {
     setIsLoading(true);
     setError(null);
-
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const jobIndex = dummyJobs.findIndex(job => job.id === id);
-      if (jobIndex === -1) {
-        throw new Error('Job not found');
-      }
-      
-      dummyJobs.splice(jobIndex, 1);
-
-      await fetchJobs();
+      console.log('Updating job:', id, data);
+      await jobsService.updateJob(id, data);
+      await fetchJobs(); // Refresh jobs list
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete job');
+      console.error('Error updating job:', err);
+      setError(err instanceof Error ? err.message : 'Failed to update job');
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -149,6 +133,5 @@ export const useJobs = () => {
     fetchJobs,
     createJob,
     updateJob,
-    deleteJob,
   };
 };

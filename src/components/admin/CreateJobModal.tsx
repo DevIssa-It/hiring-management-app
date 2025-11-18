@@ -4,7 +4,7 @@ import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
 import { Select } from '../shared/Select';
 import { JobFormConfig } from './JobFormConfig';
-import type { FieldRequirement, Job, JobFormConfiguration } from '@/types';
+import type { FieldRequirement, Job, JobFormConfiguration, EmploymentType } from '@/types';
 
 export interface CreateJobModalProps {
   isOpen: boolean;
@@ -318,6 +318,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           <JobFormConfig
             configuration={formConfig}
             onChange={setFormConfig}
+            jobType={formData.jobType as any}
           />
         </div>
       </div>

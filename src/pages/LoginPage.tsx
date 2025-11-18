@@ -1,49 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Input } from "../components/shared/Input";
 import { Button } from "../components/shared/Button";
+import { useAuth } from "../context/AuthContext";
 import Logo1 from '../assets/Logo1.svg';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { getUserByEmail, demoCredentials } from "../data/dummyData";
 import { UserRole } from "@/types";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    
+    const { login, isAuthenticated, isLoading, user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    const from = location.state?.from?.pathname || '/';
+    
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            if (from !== '/') {
+                navigate(from, { replace: true });
+            } else {
+                navigate(user.role === UserRole.ADMIN ? '/admin' : '/applicant', { replace: true });
+            }
+        }
+    }, [isAuthenticated, user, navigate, from]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError('');
         
         try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            const user = getUserByEmail(email);
-
-            const validCredentials = Object.values(demoCredentials).find(
-                Credential => Credential.email === email && Credential.password === password
-            );
-
-            if (!user || !validCredentials) {
-                throw new Error('Email atau Password salah.');
-            }
-
-            localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('auth_token', 'dummy-token-' + Date.now());
-
-            if (user.role === UserRole.ADMIN) {
-                window.location.href = '/admin';
-            } else {
-                window.location.href = '/applicant';
-            }
-
+            await login(email, password);
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Email atau password salah.');
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -110,9 +103,9 @@ export const LoginPage = () => {
                                 type="submit"
                                 variant="alternative"
                                 className="w-full h-12 text-semibold font-medium" 
-                                loading={loading}
-                                disabled={loading}>
-                                {loading ? 'Memuat...' : 'Masuk'}
+                                loading={isLoading}
+                                disabled={isLoading}>
+                                {isLoading ? 'Memuat...' : 'Masuk'}
                             </Button>
 
                             < p className="text-center text-sm text-neutral-70">

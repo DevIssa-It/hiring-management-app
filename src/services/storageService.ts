@@ -47,23 +47,64 @@ class LocalStorageService {
 }
 
 class SupabaseStorageService {
-  // TODO: Implement Supabase methods
   async get<T>(table: string, id?: string): Promise<T | null> {
-    console.log('Supabase get:', table, id);
-    return null;
+    const { supabase } = await import('@/lib/supabase');
+    
+    if (id) {
+      const { data, error } = await supabase
+        .from(table)
+        .select('*')
+        .eq('id', id)
+        .single();
+      
+      if (error) throw error;
+      return data as T;
+    }
+    
+    const { data, error } = await supabase
+      .from(table)
+      .select('*');
+    
+    if (error) throw error;
+    return data as T;
   }
 
   async set<T>(table: string, data: T): Promise<void> {
-    console.log('Supabase set:', table, data);
+    const { supabase } = await import('@/lib/supabase');
+    
+    const { error } = await supabase
+      .from(table)
+      .insert(data as any);
+    
+    if (error) throw error;
   }
 
   async remove(table: string, id: string): Promise<void> {
-    console.log('Supabase remove:', table, id);
+    const { supabase } = await import('@/lib/supabase');
+    
+    const { error } = await supabase
+      .from(table)
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
   }
 
   async query<T>(table: string, filters?: Record<string, any>): Promise<T[]> {
-    console.log('Supabase query:', table, filters);
-    return [];
+    const { supabase } = await import('@/lib/supabase');
+    
+    let query = supabase.from(table).select('*');
+    
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        query = query.eq(key, value);
+      });
+    }
+    
+    const { data, error } = await query;
+    
+    if (error) throw error;
+    return (data || []) as T[];
   }
 }
 

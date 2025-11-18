@@ -8,7 +8,14 @@ import { WebcamCapture } from '@/components/applicant/WebcamCapture';
 import CustomCalendar from '@/components/shared/CustomCalendar';
 import { useAuth } from '@/context/AuthContext';
 import { useNotification } from '@/context/NotificationContext';
-import { getJobById } from '@/data/dummyData';
+// Mock job data
+const mockJob = {
+  id: '1',
+  title: 'Frontend Developer',
+  companyName: 'Rakamin Academy',
+  description: 'We are looking for a skilled Frontend Developer to join our team.',
+  location: 'Jakarta, Indonesia'
+};
 import { IoArrowBackOutline } from 'react-icons/io5';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import type { ApplicationData, Gender } from '@/types';
@@ -42,6 +49,7 @@ export const Resume: React.FC = function Resume() {
   const [selectedCountry, setSelectedCountry] = useState(countryList[0]);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [countrySearch, setCountrySearch] = useState('');
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const filteredCountries = countryList.filter(c =>
     c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
     c.code.includes(countrySearch)
@@ -76,9 +84,31 @@ export const Resume: React.FC = function Resume() {
   const { jobId } = useParams<{ jobId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { addNotification } = useNotification();
+  const { showNotification } = useNotification();
   
-  const job = jobId ? getJobById(jobId) : null;
+  const [job, setJob] = useState<any>(null);
+  const [jobLoading, setJobLoading] = useState(true);
+
+  useEffect(() => {
+    const loadJob = async () => {
+      if (jobId) {
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 300));
+          const jobData = mockJob;
+          setJob(jobData);
+        } catch (error) {
+          console.error('Error loading job:', error);
+        } finally {
+          setJobLoading(false);
+        }
+      } else {
+        setJobLoading(false);
+      }
+    };
+
+    loadJob();
+  }, [jobId]);
   
   const [formData, setFormData] = useState<ApplicationData>({
     fullName: '',
@@ -120,16 +150,20 @@ export const Resume: React.FC = function Resume() {
       newErrors.fullName = 'Full name is required';
     }
     
-    if (!formData.email?.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = 'Invalid email format';
+    if (!formData.email?.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      newErrors.email = 'Please enter your email in the format: name@example.com';
     }
     
-    if (formData.phone && !formData.phone.match(/^8[1-9][0-9]{8,11}$/)) {
+    if (!formData.phone?.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!formData.phone.match(/^8[1-9][0-9]{8,11}$/)) {
       newErrors.phone = 'Invalid phone format (example: 81234567890)';
     }
     
     if (formData.linkedin && !formData.linkedin.match(/^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/)) {
-      newErrors.linkedin = 'Invalid LinkedIn URL format';
+      newErrors.linkedin = 'Please copy paste your Linkedin URL, example: https://www.linkedin.com/in/username';
     }
     
     setErrors(newErrors);
@@ -143,10 +177,8 @@ export const Resume: React.FC = function Resume() {
       // Define field order to scroll to topmost error
       const fieldOrder = ['fullName', 'dateOfBirth', 'domicile', 'phone', 'email', 'linkedin'];
       const errorKeys = Object.keys(errors);
-      
       // Find first error field in order
       const firstErrorField = fieldOrder.find(field => errorKeys.includes(field));
-      
       if (firstErrorField && inputRefs[firstErrorField]?.current) {
         inputRefs[firstErrorField].current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         if ('focus' in inputRefs[firstErrorField].current) {
@@ -155,27 +187,66 @@ export const Resume: React.FC = function Resume() {
       }
       return;
     }
-    
     setIsSubmitting(true);
     try {
-      // TODO: Submit application to API
-      console.log('Application submitted:', formData);
-      addNotification({
-        type: 'success',
-        title: 'Application Submitted',
-        message: 'Your application has been submitted successfully!'
+      // Get or create user
+      let currentUser = await usersService.getUserByEmail(formData.email!);
+      if (!currentUser) {
+        currentUser = await usersService.createUser({
+          email: formData.email!,
+          fullName: formData.fullName,
+          phone: formData.phone
+        });
+      }
+
+      // Submit application to Supabase
+      await applicationsService.createApplication({
+        jobId: jobId!,
+        userId: currentUser.id,
+        fullName: formData.fullName!,
+        email: formData.email!,
+        phone: formData.phone,
+        dateOfBirth: formData.dateOfBirth,
+        gender: formData.gender,
+        domicile: formData.domicile,
+        linkedinUrl: formData.linkedin,
+        profilePictureUrl: formData.profilePicture
       });
-      navigate('/applicant');
+      
+      // Save applied job to localStorage
+      const appliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
+      if (!appliedJobs.includes(jobId)) {
+        appliedJobs.push(jobId);
+        localStorage.setItem('appliedJobs', JSON.stringify(appliedJobs));
+      }
+      
+      showNotification(
+        'success',
+        'Application Submitted',
+        'Your application has been submitted successfully!'
+      );
+      navigate('/applicant/success');
     } catch (error) {
-      addNotification({
-        type: 'error',
-        title: 'Submission Failed',
-        message: 'Failed to submit application. Please try again.'
-      });
+      showNotification(
+        'error',
+        'Submission Failed',
+        'Failed to submit application. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (jobLoading) {
+    return (
+      <div className="min-h-screen bg-neutral-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main mx-auto mb-4"></div>
+          <p className="text-neutral-70">Loading job details...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!job) {
     return (
@@ -328,19 +399,42 @@ export const Resume: React.FC = function Resume() {
                             />
                           </div>
                           <ul className="max-h-60 overflow-y-auto">
-                            {filteredCountries.map(country => (
-                              <li
-                                key={country.code + country.name}
-                                className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-neutral-30"
-                                onClick={() => { setSelectedCountry(country); setShowCountryDropdown(false); }}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <img src={country.flag} alt={country.name} className="w-5 h-5 rounded-full" />
-                                  <span>{country.name}</span>
-                                </div>
-                                <span>{country.code}</span>
-                              </li>
-                            ))}
+                            {filteredCountries.map((country, idx) => {
+                              const isSelected = selectedCountry.name === country.name;
+                              const isHovered = hoveredIndex === idx;
+                              return (
+                                <li
+                                  key={country.code + country.name}
+                                  className={`flex items-center justify-between px-4 py-2 transition-all
+                                    ${isSelected 
+                                      ? 'text-neutral-60 cursor-not-allowed bg-neutral-20' 
+                                      : isHovered 
+                                        ? 'text-primary-main bg-primary-surface cursor-pointer' 
+                                        : 'text-neutral-90 bg-white cursor-pointer hover:text-primary-main'
+                                    }
+                                  `}
+                                  onClick={() => {
+                                    if (!isSelected) {
+                                      setSelectedCountry(country);
+                                      setShowCountryDropdown(false);
+                                    }
+                                  }}
+                                  onMouseEnter={() => !isSelected && setHoveredIndex(idx)}
+                                  onMouseLeave={() => setHoveredIndex(null)}
+                                  aria-disabled={isSelected}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <img 
+                                      src={country.flag} 
+                                      alt={country.name} 
+                                      className={`w-5 h-5 rounded-full ${isSelected ? 'opacity-50' : ''}`} 
+                                    />
+                                    <span>{country.name}</span>
+                                  </div>
+                                  <span>{country.code}</span>
+                                </li>
+                              );
+                            })}
                           </ul>
                         </div>
                       )}
@@ -352,7 +446,9 @@ export const Resume: React.FC = function Resume() {
                       </span>
                       <input
                         type="tel"
-                        className="w-full px-3 py-2 border-2 rounded-r-lg focus:border-primary-main"
+                        className={`w-full px-3 py-2 border-2 rounded-r-lg focus:border-primary-main ${
+                          errors.phone ? 'border-danger-main' : ''
+                        }`}
                         placeholder="81XXXXXXXXXX"
                         value={formData.phone || ''}
                         onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}

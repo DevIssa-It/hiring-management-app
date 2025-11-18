@@ -1,6 +1,3 @@
-// AuthContext
-// Global authentication state
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { User } from '@/types';
 import { UserRole } from '@/types';
