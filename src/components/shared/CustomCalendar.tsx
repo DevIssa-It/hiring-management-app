@@ -112,6 +112,33 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
             className={`absolute left-0 z-40 w-max min-w-[320px] ${dropdownPosition === 'top' ? 'mb-2 bottom-full' : 'mt-2 top-full'}`}
           >
             <div className="bg-white rounded-xl shadow-lg p-4 border">
+              <style>{`
+                .react-calendar__tile {
+                  background: white;
+                  color: #374151;
+                  border: none;
+                  border-radius: 6px;
+                  margin: 1px;
+                  transition: all 0.2s ease;
+                }
+                .react-calendar__tile:hover {
+                  background-color: #9ca3af !important;
+                  color: white !important;
+                }
+                .react-calendar__tile--active {
+                  background-color: #01959F !important;
+                  color: white !important;
+                }
+                .react-calendar__tile:disabled {
+                  background-color: #f9fafb !important;
+                  color: #d1d5db !important;
+                  cursor: not-allowed !important;
+                }
+                .react-calendar__tile:disabled:hover {
+                  background-color: #f9fafb !important;
+                  color: #d1d5db !important;
+                }
+              `}</style>
               <Calendar
                 value={value || undefined}
                 onChange={handleDateChange}
@@ -123,6 +150,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
                 prev2Label="««"
                 next2Label="»»"
                 showNeighboringMonth={true}
+                maxDate={new Date()}
               />
             </div>
           </div>
