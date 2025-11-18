@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/shared/Button';
-import Verification from '@/assets/verified.svg';
+import Verification from '@/assets/Verified.svg';
 
 const ApplicationSuccess: React.FC = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const ApplicationSuccess: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white">
       <img
-        src={VerifiedIcon}
+        src={Verification}
         alt="Application Success Illustration"
         className="w-64 h-64 mb-8"
         onError={e => (e.currentTarget.style.display = 'none')}
