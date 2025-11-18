@@ -34,9 +34,20 @@ export const ManageJob = () => {
 					const appsData = await applicationsService.getApplicationsByJob(jobId);
 					console.log('Applications data result:', appsData);
 					console.log('Applications count:', appsData?.length || 0);
+					// Debug first application structure
+					if (appsData && appsData.length > 0) {
+						console.log('First application structure:', appsData[0]);
+						console.log('First applicantData:', appsData[0]?.applicantData);
+					}
 					
 					setJob(jobData);
-					setApplications(appsData);
+					// Filter applications yang memiliki data valid
+					const validApplications = (appsData || []).filter(app => 
+						app && 
+						app.applicantData && 
+						typeof app.applicantData === 'object'
+					);
+					setApplications(validApplications);
 				} catch (error) {
 					console.error('=== ERROR DETAILS ===');
 					console.error('Error object:', error);

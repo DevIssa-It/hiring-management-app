@@ -75,10 +75,11 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
       case 'select':
         return <input type="checkbox" aria-label="Pilih kandidat" />;
       case 'matchRate':
+        const matchRate = app.applicantData ? calculateMatchRate(app.applicantData, formConfiguration) : 0;
         return (
           <span className="flex items-center gap-1">
             <span className="text-xs font-bold text-warning-main">
-              {calculateMatchRate(app.applicantData || {}, formConfiguration)}%
+              {matchRate}%
             </span>
             <span className="text-warning-main">★</span>
           </span>
@@ -92,8 +93,13 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
       case 'status':
         return renderStatus(app.status || 'submitted');
       default:
-        const value = app.applicantData?.[columnId as keyof typeof app.applicantData];
-        return value !== undefined && value !== null ? String(value) : '-';
+        try {
+          const value = app.applicantData?.[columnId as keyof typeof app.applicantData];
+          return value !== undefined && value !== null && value !== '' ? String(value) : '-';
+        } catch (error) {
+          console.error('Error accessing field:', columnId, error);
+          return '-';
+        }
     }
   };
 
