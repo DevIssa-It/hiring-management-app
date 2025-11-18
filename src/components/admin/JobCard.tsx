@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import type { JobListItem } from '@/types';
 import { Badge } from '@/components/shared/Badge';
 import { Button } from "@/components/shared/Button";
+import { formatSalary } from '@/utils/salaryFormatter';
 
 export interface JobCardProps {
   job: JobListItem;
@@ -30,10 +31,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, onStatusChange }
     };
   }, [showMenu]);
 
-  const formatSalary = (min?:number, max?: number) => {
-    if (!min || !max) return 'Salary not specified';
-    return `Rp${min.toLocaleString('id-ID')} - Rp${max.toLocaleString('id-ID')}`;
-  }
+
 
   const formatDate = (date: string) => {
     const dateObj = new Date(date);

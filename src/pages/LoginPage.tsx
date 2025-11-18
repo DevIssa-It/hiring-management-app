@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import Logo1 from '../assets/Logo1.svg';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { UserRole } from "@/types";
+import { InlineSpinner } from "../components/shared/LoadingSpinner";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -111,7 +112,12 @@ export const LoginPage = () => {
                                 className="w-full h-12 text-semibold font-medium" 
                                 loading={isLoading}
                                 disabled={isLoading}>
-                                {isLoading ? 'Memuat...' : 'Masuk'}
+                                {isLoading ? (
+                                    <div className="flex items-center gap-2">
+                                        <InlineSpinner />
+                                        Memuat
+                                    </div>
+                                ) : 'Masuk'}
                             </Button>
 
                             < p className="text-center text-sm text-neutral-70">

@@ -8,7 +8,8 @@ import { WebcamCapture } from '@/components/applicant/WebcamCapture';
 import CustomCalendar from '@/components/shared/CustomCalendar';
 import { useAuth } from '@/context/AuthContext';
 import { useNotification } from '@/context/NotificationContext';
-import { usersService, applicationsService } from '@/services/supabaseService';
+import { usersService, applicationsService, jobsService } from '@/services/supabaseService';
+import { LoadingSpinner, InlineSpinner } from '@/components/shared/LoadingSpinner';
 // Mock job data
 const mockJob = {
   id: '1',
@@ -88,18 +89,47 @@ export const Resume: React.FC = function Resume() {
   const { showNotification } = useNotification();
   
   const [job, setJob] = useState<any>(null);
+  const [jobConfig, setJobConfig] = useState<any>(null);
   const [jobLoading, setJobLoading] = useState(true);
 
   useEffect(() => {
     const loadJob = async () => {
       if (jobId) {
         try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 300));
-          const jobData = mockJob;
-          setJob(jobData);
+          // Try to get job from backend first
+          const jobData = await jobsService.getJobById(jobId);
+          if (jobData) {
+            setJob(jobData);
+            setJobConfig(jobData.formConfiguration);
+          } else {
+            // Fallback to mock data
+            setJob(mockJob);
+            // Default configuration for mock job
+            setJobConfig({
+              fullName: 'mandatory',
+              email: 'mandatory', 
+              phone: 'mandatory',
+              dateOfBirth: 'mandatory',
+              gender: 'optional',
+              domicile: 'optional',
+              linkedin: 'optional',
+              profilePicture: 'optional'
+            });
+          }
         } catch (error) {
           console.error('Error loading job:', error);
+          // Fallback to mock data
+          setJob(mockJob);
+          setJobConfig({
+            fullName: 'mandatory',
+            email: 'mandatory',
+            phone: 'mandatory', 
+            dateOfBirth: 'mandatory',
+            gender: 'optional',
+            domicile: 'optional',
+            linkedin: 'optional',
+            profilePicture: 'optional'
+          });
         } finally {
           setJobLoading(false);
         }
@@ -144,31 +174,67 @@ export const Resume: React.FC = function Resume() {
     setShowWebcam(false);
   };
 
+  // Helper functions for dynamic form rendering
+  const isFieldVisible = (fieldName: string) => {
+    if (!jobConfig) return true;
+    return jobConfig[fieldName] !== 'off';
+  };
+
+  const isFieldRequired = (fieldName: string) => {
+    if (!jobConfig) return false;
+    return jobConfig[fieldName] === 'mandatory';
+  };
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!formData.fullName?.trim()) {
+    if (!jobConfig) return false;
+    
+    // Validate based on job configuration
+    if (jobConfig.fullName === 'mandatory' && !formData.fullName?.trim()) {
       newErrors.fullName = 'Full name is required';
     }
     
-    if (!formData.dateOfBirth) {
+    if (jobConfig.dateOfBirth === 'mandatory' && !formData.dateOfBirth) {
       newErrors.dateOfBirth = 'Date of birth is required';
     }
     
-    if (!formData.email?.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      newErrors.email = 'Please enter your email in the format: name@example.com';
+    if (jobConfig.email === 'mandatory') {
+      if (!formData.email?.trim()) {
+        newErrors.email = 'Email is required';
+      } else if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        newErrors.email = 'Please enter your email in the format: name@example.com';
+      }
     }
     
-    if (!formData.phone?.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!formData.phone.match(/^8[1-9][0-9]{8,11}$/)) {
-      newErrors.phone = 'Invalid phone format (example: 81234567890)';
+    if (jobConfig.phone === 'mandatory') {
+      if (!formData.phone?.trim()) {
+        newErrors.phone = 'Phone number is required';
+      } else if (!formData.phone.match(/^8[1-9][0-9]{8,11}$/)) {
+        newErrors.phone = 'Invalid phone format (example: 81234567890)';
+      }
     }
     
-    if (formData.linkedin && !formData.linkedin.match(/^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/)) {
+    if (jobConfig.gender === 'mandatory' && !formData.gender) {
+      newErrors.gender = 'Gender is required';
+    }
+    
+    if (jobConfig.domicile === 'mandatory' && !formData.domicile?.trim()) {
+      newErrors.domicile = 'Domicile is required';
+    }
+    
+    if (jobConfig.linkedin === 'mandatory') {
+      if (!formData.linkedin?.trim()) {
+        newErrors.linkedin = 'LinkedIn profile is required';
+      } else if (!formData.linkedin.match(/^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/)) {
+        newErrors.linkedin = 'Please copy paste your Linkedin URL, example: https://www.linkedin.com/in/username';
+      }
+    } else if (formData.linkedin && !formData.linkedin.match(/^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/)) {
       newErrors.linkedin = 'Please copy paste your Linkedin URL, example: https://www.linkedin.com/in/username';
+    }
+    
+    if (jobConfig.profilePicture === 'mandatory' && !formData.profilePicture) {
+      newErrors.profilePicture = 'Profile picture is required';
     }
     
     setErrors(newErrors);
@@ -245,10 +311,7 @@ export const Resume: React.FC = function Resume() {
   if (jobLoading) {
     return (
       <div className="min-h-screen bg-neutral-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main mx-auto mb-4"></div>
-          <p className="text-neutral-70">Loading job details...</p>
-        </div>
+        <LoadingSpinner size="lg" text="Loading job details" />
       </div>
     );
   }
@@ -290,102 +353,128 @@ export const Resume: React.FC = function Resume() {
 
             <div className="space-y-6 px-11">
               {/* Profile Picture */}
-              <div className="flex flex-col items-start space-y-4">
-                <label className="block text-sm font-medium text-neutral-90">
-                  Profile Picture
-                </label>
-                <div className="w-32 h-32 rounded-full bg-neutral-30 flex items-center justify-center overflow-hidden -mt-2">
-                  {formData.profilePicture ? (
-                    <img 
-                      src={formData.profilePicture} 
-                      alt="Profile" 
-                      className="object-cover w-32 h-32" 
-                    />
-                  ) : (
-                    <span className="text-neutral-60">No Photo</span>
+              {isFieldVisible('profilePicture') && (
+                <div className="flex flex-col items-start space-y-4">
+                  <label className="block text-sm font-medium text-neutral-90">
+                    Profile Picture
+                    {isFieldRequired('profilePicture') && <span className="text-danger-main ml-1">*</span>}
+                  </label>
+                  <div className="w-32 h-32 rounded-full bg-neutral-30 flex items-center justify-center overflow-hidden -mt-2">
+                    {formData.profilePicture ? (
+                      <img 
+                        src={formData.profilePicture} 
+                        alt="Profile" 
+                        className="object-cover w-32 h-32" 
+                      />
+                    ) : (
+                      <span className="text-neutral-60">No Photo</span>
+                    )}
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="neutral" 
+                    onClick={() => setShowWebcam(true)}
+                    className="w-36 h-8 flex items-center gap-2 border-2 border-neutral-40 rounded-lg"
+                  >
+                    <MdOutlineFileUpload className="w-4 h-4" />
+                    Take a Picture
+                  </Button>
+                  {errors.profilePicture && (
+                    <p className="text-sm text-danger-main">{errors.profilePicture}</p>
                   )}
                 </div>
-                <Button 
-                  type="button" 
-                  variant="neutral" 
-                  onClick={() => setShowWebcam(true)}
-                  className="w-36 h-8 flex items-center gap-2 border-2 border-neutral-40 rounded-lg"
-                >
-                  <MdOutlineFileUpload className="w-4 h-4" />
-                  Take a Picture
-                </Button>
-              </div>
+              )}
 
               {/* Full Name */}
-              <div ref={inputRefs.fullName}>
-                <Input
-                  label="Full Name"
-                  value={formData.fullName || ''}
-                  onChange={handleInputChange('fullName')}
-                  placeholder="Enter your full name"
-                  required
-                  error={errors.fullName}
-                />
-              </div>
+              {isFieldVisible('fullName') && (
+                <div ref={inputRefs.fullName}>
+                  <Input
+                    label="Full Name"
+                    value={formData.fullName || ''}
+                    onChange={handleInputChange('fullName')}
+                    placeholder="Enter your full name"
+                    required={isFieldRequired('fullName')}
+                    error={errors.fullName}
+                  />
+                </div>
+              )}
 
               {/* Date of Birth */}
-              <div ref={inputRefs.dateOfBirth}>
-                <CustomCalendar
-                  label="Date of Birth"
-                  value={formData.dateOfBirth || null}
-                  onChange={(date) => {
-                    setFormData(prev => ({ ...prev, dateOfBirth: date || undefined }));
-                    if (errors.dateOfBirth) {
-                      setErrors(prev => ({ ...prev, dateOfBirth: '' }));
-                    }
-                  }}
-                  placeholder="Select date of birth"
-                  required
-                  error={errors.dateOfBirth}
-                />
-              </div>
+              {isFieldVisible('dateOfBirth') && (
+                <div ref={inputRefs.dateOfBirth}>
+                  <CustomCalendar
+                    label="Date of Birth"
+                    value={formData.dateOfBirth || null}
+                    onChange={(date) => {
+                      setFormData(prev => ({ ...prev, dateOfBirth: date || undefined }));
+                      if (errors.dateOfBirth) {
+                        setErrors(prev => ({ ...prev, dateOfBirth: '' }));
+                      }
+                    }}
+                    placeholder="Select date of birth"
+                    required={isFieldRequired('dateOfBirth')}
+                    error={errors.dateOfBirth}
+                  />
+                </div>
+              )}
 
               {/* Gender (Pronoun) */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-neutral-90 mb-2">
-                  Pronoun
-                </label>
-                <div className="flex gap-6">
-                  {genderOptions.map((option) => (
-                    <label key={option.value} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={option.value}
-                        checked={formData.gender === option.value}
-                        onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value as Gender }))}
-                        className="w-4 h-4 text-primary-main border-neutral-40 focus:ring-primary-focus accent-primary-main"
-                      />
-                      <span className="text-neutral-90">{option.label}</span>
-                    </label>
-                  ))}
+              {isFieldVisible('gender') && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-neutral-90 mb-2">
+                    Pronoun
+                    {isFieldRequired('gender') && <span className="text-danger-main ml-1">*</span>}
+                  </label>
+                  <div className="flex gap-6">
+                    {genderOptions.map((option) => (
+                      <label key={option.value} className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="gender"
+                          value={option.value}
+                          checked={formData.gender === option.value}
+                          onChange={(e) => {
+                            setFormData(prev => ({ ...prev, gender: e.target.value as Gender }));
+                            if (errors.gender) {
+                              setErrors(prev => ({ ...prev, gender: '' }));
+                            }
+                          }}
+                          className="w-4 h-4 text-primary-main border-neutral-40 focus:ring-primary-focus accent-primary-main"
+                        />
+                        <span className="text-neutral-90">{option.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.gender && (
+                    <p className="text-sm text-danger-main mt-1">{errors.gender}</p>
+                  )}
                 </div>
-              </div>
+              )}
 
               {/* Domicile */}
-              <div ref={inputRefs.domicile}>
-                <Select
-                  label="Domicile"
-                  options={domicileOptions}
-                  value={formData.domicile || ''}
-                  onChange={handleSelectChange('domicile')}
-                  placeholder="Choose your domicile"
-                  variant="input"
-                />
-              </div>
+              {isFieldVisible('domicile') && (
+                <div ref={inputRefs.domicile}>
+                  <Select
+                    label="Domicile"
+                    options={domicileOptions}
+                    value={formData.domicile || ''}
+                    onChange={handleSelectChange('domicile')}
+                    placeholder="Choose your domicile"
+                    variant="input"
+                    required={isFieldRequired('domicile')}
+                    error={errors.domicile}
+                  />
+                </div>
+              )}
 
               {/* Phone Number */}
-              <div ref={inputRefs.phone}>
-                {/* Phone Number with Country Code Dropdown */}
-                <div className="flex flex-col gap-2">
-                  <label className="block text-sm font-medium text-neutral-90">
-                    Phone number<span className="text-danger-main">*</span>
-                  </label>
+              {isFieldVisible('phone') && (
+                <div ref={inputRefs.phone}>
+                  {/* Phone Number with Country Code Dropdown */}
+                  <div className="flex flex-col gap-2">
+                    <label className="block text-sm font-medium text-neutral-90">
+                      Phone number{isFieldRequired('phone') && <span className="text-danger-main">*</span>}
+                    </label>
                   <div className="flex gap-2 items-center">
                     {/* Flag Dropdown */}
                     <div className="relative" ref={countryDropdownRef}>
@@ -473,43 +562,49 @@ export const Resume: React.FC = function Resume() {
                       />
                     </div>
                   </div>
-                  {errors.phone && <span className="text-danger-main text-xs mt-1">{errors.phone}</span>}
+                    {errors.phone && <span className="text-danger-main text-xs mt-1">{errors.phone}</span>}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Email */}
-              <div ref={inputRefs.email}>
-                <Input
-                  label="Email"
-                  type="email"
-                  value={formData.email || ''}
-                  onChange={handleInputChange('email')}
-                  placeholder="Enter your email address"
-                  required
-                  error={errors.email}
-                />
-              </div>
+              {isFieldVisible('email') && (
+                <div ref={inputRefs.email}>
+                  <Input
+                    label="Email"
+                    type="email"
+                    value={formData.email || ''}
+                    onChange={handleInputChange('email')}
+                    placeholder="Enter your email address"
+                    required={isFieldRequired('email')}
+                    error={errors.email}
+                  />
+                </div>
+              )}
 
               {/* LinkedIn Profile */}
-              <div ref={inputRefs.linkedin}>
-                <Input
-                  label="LinkedIn Profile"
-                  type="text"
-                  value={formData.linkedin || ''}
-                  onChange={handleInputChange('linkedin')}
-                  placeholder="https://linkedin.com/in/username"
-                  error={errors.linkedin}
-                />
-                {formData.linkedin &&
-                  /^https?:\/\/(www\.)?linkedin\.com\/.+/.test(formData.linkedin) && (
-                    <div className="flex items-center gap-2 mt-2 text-teal-700">
-                      <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-teal-500 text-white">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      </span>
-                      <span className="font-medium">URL address found</span>
-                    </div>
-                  )}
-              </div>
+              {isFieldVisible('linkedin') && (
+                <div ref={inputRefs.linkedin}>
+                  <Input
+                    label="LinkedIn Profile"
+                    type="text"
+                    value={formData.linkedin || ''}
+                    onChange={handleInputChange('linkedin')}
+                    placeholder="https://linkedin.com/in/username"
+                    required={isFieldRequired('linkedin')}
+                    error={errors.linkedin}
+                  />
+                  {formData.linkedin &&
+                    /^https?:\/\/(www\.)?linkedin\.com\/.+/.test(formData.linkedin) && (
+                      <div className="flex items-center gap-2 mt-2 text-teal-700">
+                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-teal-500 text-white">
+                          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 8l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </span>
+                        <span className="font-medium">URL address found</span>
+                      </div>
+                    )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -524,7 +619,12 @@ export const Resume: React.FC = function Resume() {
             className="max-w-2xl w-full px-8 h-10 font-semibold"
             onClick={handleSubmit}
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Application'}
+            {isSubmitting ? (
+              <div className="flex items-center gap-2">
+                <InlineSpinner />
+                Submitting
+              </div>
+            ) : 'Submit Application'}
           </Button>
         </div>
       </div>

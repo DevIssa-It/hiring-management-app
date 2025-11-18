@@ -4,6 +4,7 @@ import { Button } from '../shared/Button';
 import { Input } from '../shared/Input';
 import { Select } from '../shared/Select';
 import { JobFormConfig } from './JobFormConfig';
+import { InlineSpinner } from '../shared/LoadingSpinner';
 import type { FieldRequirement, Job, JobFormConfiguration, EmploymentType } from '@/types';
 
 export interface CreateJobModalProps {
@@ -190,16 +191,26 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
         onClick={handleSaveDraft} 
         disabled={isSubmitting}
         type="button"
-        className="w-28 h-8 text-sm font-semibold">
-        {isSubmitting ? 'Saving...' : 'Save as Draft'}
+        className="w-32 h-8 text-sm font-semibold">
+        {isSubmitting ? (
+          <div className="flex items-center gap-1">
+            <InlineSpinner size="sm" color="primary" />
+            Saving
+          </div>
+        ) : 'Save as Draft'}
       </Button>
       <Button
         variant="primary"
         onClick={handleSubmit}
         disabled={isSubmitting}
         type="button"
-        className="w-28 h-8 text-sm font-semibold">
-        {isSubmitting ? 'Publishing...' : 'Publish Job'}
+        className="w-32 h-8 text-sm font-semibold">
+        {isSubmitting ? (
+          <div className="flex items-center gap-1">
+            <InlineSpinner size="sm" />
+            Publishing
+          </div>
+        ) : 'Publish Job'}
       </Button>
     </>
   );

@@ -14,25 +14,45 @@ interface RegisterData {
   name: string;
 }
 
-// Ensure admin user exists in database
-const ensureAdminUser = async (email: string) => {
+// Cache untuk user profiles
+const userProfileCache = new Map<string, any>();
+
+// Optimized user profile fetching dengan cache dan timeout
+const getUserProfile = async (email: string) => {
+  // Check cache first
+  if (userProfileCache.has(email)) {
+    return userProfileCache.get(email);
+  }
+
   try {
-    let userProfile = await usersService.getUserByEmail(email);
+    // Add timeout untuk database calls
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database timeout')), 5000)
+    );
     
+    const userProfilePromise = usersService.getUserByEmail(email);
+    let userProfile = await Promise.race([userProfilePromise, timeoutPromise]);
+    
+    // Auto-create admin user jika belum ada
     if (!userProfile && email === 'admin@talenthunt') {
-      console.log('Creating admin user in database...');
-      userProfile = await usersService.createUser({
+      const createUserPromise = usersService.createUser({
         email: email,
         role: 'admin',
         fullName: 'Admin User'
       });
-      console.log('Admin user created:', userProfile);
+      userProfile = await Promise.race([createUserPromise, timeoutPromise]);
+    }
+    
+    // Cache the result
+    if (userProfile) {
+      userProfileCache.set(email, userProfile);
     }
     
     return userProfile;
   } catch (error) {
-    console.error('Error ensuring admin user:', error);
-    return null;
+    console.error('Error fetching user profile:', error);
+    // Return default untuk menghindari hang
+    return { role: 'applicant' };
   }
 };
 
@@ -55,11 +75,8 @@ export const authService = {
         throw new Error('No user data returned from authentication');
       }
 
-      // Pastikan user profile ada di database
-      let userProfile = await ensureAdminUser(email);
-      if (!userProfile) {
-        userProfile = await usersService.getUserByEmail(email);
-      }
+      // Get user profile dengan cache
+      const userProfile = await getUserProfile(email);
       
       console.log('Login - User profile from DB:', userProfile);
       
@@ -118,6 +135,10 @@ export const authService = {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      
+      // Clear cache saat logout
+      userProfileCache.clear();
+      
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };
@@ -131,11 +152,8 @@ export const authService = {
       if (error) throw error;
       if (!user) return { success: false, error: 'No user found' };
 
-      // Pastikan user profile ada di database
-      let userProfile = await ensureAdminUser(user.email!);
-      if (!userProfile) {
-        userProfile = await usersService.getUserByEmail(user.email!);
-      }
+      // Get user profile dengan cache
+      const userProfile = await getUserProfile(user.email!);
       
       console.log('getCurrentUser - User profile from DB:', userProfile);
       

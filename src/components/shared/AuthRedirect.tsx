@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { UserRole } from '@/types';
+import { LoadingSpinner } from './LoadingSpinner';
 
 export const AuthRedirect = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -18,10 +19,7 @@ export const AuthRedirect = () => {
       const targetPath = user.role === UserRole.ADMIN ? '/admin' : '/applicant';
       console.log('AuthRedirect - Redirecting to:', targetPath);
       
-      // Gunakan timeout kecil untuk memastikan state sudah stabil
-      setTimeout(() => {
-        navigate(targetPath, { replace: true });
-      }, 100);
+      navigate(targetPath, { replace: true });
     } else {
       console.log('AuthRedirect - Not authenticated, redirecting to login');
       navigate('/login', { replace: true });
@@ -30,10 +28,9 @@ export const AuthRedirect = () => {
 
   // Tampilkan loading saat masih memuat
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-lg">
-        {isLoading ? 'Loading...' : 'Redirecting...'}
-      </div>
-    </div>
+    <LoadingSpinner 
+      fullScreen 
+      text={isLoading ? 'Loading' : 'Redirecting'} 
+    />
   );
 };

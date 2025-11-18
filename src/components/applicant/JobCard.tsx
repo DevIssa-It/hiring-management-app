@@ -2,6 +2,7 @@ import type { Job } from '@/types';
 import Logo1 from '@/assets/Logo1.svg';
 import { HiOutlineLocationMarker, HiOutlineBriefcase } from 'react-icons/hi';
 import { HiOutlineBanknotes } from 'react-icons/hi2';
+import { formatSalary } from '@/utils/salaryFormatter';
 
 export interface JobCardProps {
   job: Job;
@@ -48,12 +49,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
           <span>{job.location}</span>
         </div>
         
-        {job.salaryMin && job.salaryMax && (
-          <div className={`flex items-center gap-2 text-sm ${isOpen ? 'text-neutral-80' : 'text-neutral-60'}`}>
-            <HiOutlineBanknotes className="w-4 h-4" />
-            <span>Rp {job.salaryMin.toLocaleString('id-ID')} - Rp {job.salaryMax.toLocaleString('id-ID')}</span>
-          </div>
-        )}
+        <div className={`flex items-center gap-2 text-sm ${isOpen ? 'text-neutral-80' : 'text-neutral-60'}`}>
+          <HiOutlineBanknotes className="w-4 h-4" />
+          <span>{formatSalary(job.salaryMin, job.salaryMax)}</span>
+        </div>
       </div>
     </div>
   );
