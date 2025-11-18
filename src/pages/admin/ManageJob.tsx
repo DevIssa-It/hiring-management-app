@@ -7,6 +7,7 @@ import { useNotification } from '@/context/NotificationContext';
 import EmptyApplicant from '@/assets/EmptyApplicant.svg';
 import { jobsService, applicationsService } from '@/services/supabaseService';
 import { CandidateTable } from '@/components/admin/CandidateTable';
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 
 export const ManageJob = () => {
 	const { jobId } = useParams<{ jobId: string }>();
@@ -53,7 +54,7 @@ export const ManageJob = () => {
 		loadData();
 	}, [jobId]);
 	
-	const jobTitle = job ? job.title : 'Job not found';
+	const jobTitle = job?.title || 'Job not found';
 	const { notifications, removeNotification } = useNotification();
 
 	const handleApplicationClick = (applicationId: string) => {
@@ -110,12 +111,9 @@ export const ManageJob = () => {
 				<div className="bg-white rounded-xl border border-neutral-40 shadow-soft p-2 min-h-[400px] flex flex-col items-stretch">
 					{loading ? (
 						<div className="flex justify-center items-center py-20">
-							<div className="text-center">
-								<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
-								<span className="text-neutral-60">Loading candidates...</span>
-							</div>
+							<LoadingSpinner text="Loading candidates" />
 						</div>
-					) : applications.length === 0 ? (
+					) : (applications?.length || 0) === 0 ? (
 						<div className="flex flex-col items-center justify-center py-20">
 							<img src={EmptyApplicant} alt="No candidates" className="w-64 h-64 mb-6" />
 							<h3 className="text-lg font-semibold text-neutral-100 mb-2">No candidates found</h3>
@@ -126,8 +124,8 @@ export const ManageJob = () => {
 					) : (
 						<CandidateTable
 							jobId={jobId || ''}
-							applications={applications}
-							formConfiguration={{
+							applications={applications || []}
+							formConfiguration={job?.formConfiguration || {
 								fullName: 'mandatory',
 								email: 'mandatory',
 								phone: 'optional',

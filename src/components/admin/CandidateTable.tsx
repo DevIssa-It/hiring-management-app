@@ -69,6 +69,8 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
   } = useResizableTable({ initialColumns });
 
   const renderCellContent = (columnId: string, app: Application) => {
+    if (!app || !app.applicantData) return '-';
+    
     switch (columnId) {
       case 'select':
         return <input type="checkbox" aria-label="Pilih kandidat" />;
@@ -76,22 +78,22 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
         return (
           <span className="flex items-center gap-1">
             <span className="text-xs font-bold text-warning-main">
-              {calculateMatchRate(app.applicantData, formConfiguration)}%
+              {calculateMatchRate(app.applicantData || {}, formConfiguration)}%
             </span>
             <span className="text-warning-main">★</span>
           </span>
         );
       case 'dateOfBirth':
-        return app.applicantData.dateOfBirth
+        return app.applicantData?.dateOfBirth
           ? (new Date().getFullYear() - new Date(app.applicantData.dateOfBirth).getFullYear()).toString()
           : '-';
       case 'appliedDate':
-        return new Date(app.appliedAt).toLocaleDateString();
+        return app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : '-';
       case 'status':
-        return renderStatus(app.status);
+        return renderStatus(app.status || 'submitted');
       default:
-        const value = app.applicantData[columnId as keyof typeof app.applicantData];
-        return value !== undefined ? String(value) : '-';
+        const value = app.applicantData?.[columnId as keyof typeof app.applicantData];
+        return value !== undefined && value !== null ? String(value) : '-';
     }
   };
 
@@ -123,11 +125,11 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {applications.map((app) => (
+          {applications?.map((app) => (
             <tr 
-              key={app.id}
+              key={app?.id || Math.random()}
               className="hover:bg-neutral-30 cursor-pointer"
-              onClick={() => onApplicationClick?.(app.id)}
+              onClick={() => app?.id && onApplicationClick?.(app.id)}
             >
               {columns.map((col) => (
                 <td 
@@ -139,7 +141,7 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
                 </td>
               ))}
             </tr>
-          ))}
+          )) || []}
         </tbody>
       </table>
     </div>
