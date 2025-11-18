@@ -1,16 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/shared/Button';
-import Verified from '@/assets/Verified.svg';
+import VerifiedIcon from '@/assets/Verified.svg';
 
 const ApplicationSuccess: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-      {/* Illustration - replace src with your own image if needed */}
       <img
-        src={Verified}
+        src={VerifiedIcon}
         alt="Application Success Illustration"
         className="w-64 h-64 mb-8"
         onError={e => (e.currentTarget.style.display = 'none')}

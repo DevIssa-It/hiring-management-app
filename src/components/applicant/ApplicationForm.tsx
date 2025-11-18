@@ -114,7 +114,24 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ job, onSubmit 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const formFields = createFormFields(job.formConfiguration);
+  // Default form configuration if job doesn't have one
+  const defaultFormConfig = {
+    fullName: 'mandatory' as FieldRequirement,
+    email: 'mandatory' as FieldRequirement,
+    phone: 'optional' as FieldRequirement,
+    gender: 'optional' as FieldRequirement,
+    dateOfBirth: 'optional' as FieldRequirement,
+    linkedin: 'optional' as FieldRequirement,
+    portfolio: 'optional' as FieldRequirement,
+    domicile: 'optional' as FieldRequirement,
+    expectedSalary: 'optional' as FieldRequirement,
+    availability: 'optional' as FieldRequirement,
+    profilePicture: 'optional' as FieldRequirement,
+    resume: 'optional' as FieldRequirement,
+    coverLetter: 'optional' as FieldRequirement,
+  };
+
+  const formFields = createFormFields(job.formConfiguration || defaultFormConfig);
   const visibleFields = formFields.filter(field => field.requirement !== 'off');
 
   const handleFieldChange = (fieldName: keyof ApplicationData, value: any) => {
@@ -170,10 +187,12 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ job, onSubmit 
     }
 
     try {
+      console.log('Submitting application with data:', formData);
       await submitApplication(job.id, user.id, formData);
       await onSubmit(formData);
     } catch (error) {
       console.error('Failed to submit application:', error);
+      alert('Failed to submit application: ' + (error instanceof Error ? error.message : 'Unknown error'));
       throw error;
     }
   };

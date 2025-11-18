@@ -49,7 +49,7 @@ export const useApplications = () => {
     try {
       console.log('Submitting application:', { jobId, userId, data });
       
-      await applicationsService.createApplication({
+      const result = await applicationsService.createApplication({
         jobId,
         userId,
         fullName: data.fullName || '',
@@ -61,6 +61,8 @@ export const useApplications = () => {
         linkedinUrl: data.linkedin,
         profilePictureUrl: data.profilePicture,
       });
+      
+      console.log('Application submitted successfully:', result);
     } catch (err) {
       console.error('Error submitting application:', err);
       setError(err instanceof Error ? err.message : 'Failed to submit application');

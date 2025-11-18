@@ -35,7 +35,22 @@ export const jobsService = {
       salaryMax: job.salary_max,
       status: job.status,
       createdAt: new Date(job.created_at),
-      updatedAt: new Date(job.updated_at)
+      updatedAt: new Date(job.updated_at),
+      formConfiguration: {
+        fullName: 'mandatory',
+        email: 'mandatory',
+        phone: 'optional',
+        gender: 'optional',
+        dateOfBirth: 'optional',
+        linkedin: 'optional',
+        portfolio: 'optional',
+        domicile: 'optional',
+        expectedSalary: 'optional',
+        availability: 'optional',
+        profilePicture: 'optional',
+        resume: 'optional',
+        coverLetter: 'optional',
+      }
     })) || [];
   },
   async getActiveJobs() {
@@ -108,7 +123,22 @@ export const jobsService = {
       salaryMax: data.salary_max,
       status: data.status,
       createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at)
+      updatedAt: new Date(data.updated_at),
+      formConfiguration: {
+        fullName: 'mandatory',
+        email: 'mandatory',
+        phone: 'optional',
+        gender: 'optional',
+        dateOfBirth: 'optional',
+        linkedin: 'optional',
+        portfolio: 'optional',
+        domicile: 'optional',
+        expectedSalary: 'optional',
+        availability: 'optional',
+        profilePicture: 'optional',
+        resume: 'optional',
+        coverLetter: 'optional',
+      }
     };
     
     console.log('Formatted job result:', result);
@@ -208,24 +238,35 @@ export const applicationsService = {
     linkedinUrl?: string;
     profilePictureUrl?: string;
   }) {
+    console.log('Creating application with data:', applicationData);
+    
+    const insertData = {
+      job_id: applicationData.jobId,
+      user_id: applicationData.userId,
+      full_name: applicationData.fullName,
+      email: applicationData.email,
+      phone: applicationData.phone,
+      date_of_birth: applicationData.dateOfBirth?.toISOString().split('T')[0],
+      gender: applicationData.gender,
+      domicile: applicationData.domicile,
+      linkedin_url: applicationData.linkedinUrl,
+      profile_picture_url: applicationData.profilePictureUrl
+    };
+    
+    console.log('Insert data for Supabase:', insertData);
+    
     const { data, error } = await supabase
       .from('applications')
-      .insert({
-        job_id: applicationData.jobId,
-        user_id: applicationData.userId,
-        full_name: applicationData.fullName,
-        email: applicationData.email,
-        phone: applicationData.phone,
-        date_of_birth: applicationData.dateOfBirth?.toISOString().split('T')[0],
-        gender: applicationData.gender,
-        domicile: applicationData.domicile,
-        linkedin_url: applicationData.linkedinUrl,
-        profile_picture_url: applicationData.profilePictureUrl
-      })
+      .insert(insertData)
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error in createApplication:', error);
+      throw error;
+    }
+    
+    console.log('Application created successfully:', data);
     return data;
   },
 
