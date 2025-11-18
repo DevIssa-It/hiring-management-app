@@ -41,13 +41,8 @@ export const ManageJob = () => {
 					}
 					
 					setJob(jobData);
-					// Filter applications yang memiliki data valid
-					const validApplications = (appsData || []).filter(app => 
-						app && 
-						app.applicantData && 
-						typeof app.applicantData === 'object'
-					);
-					setApplications(validApplications);
+					// Set applications data directly
+					setApplications(appsData || []);
 				} catch (error) {
 					console.error('=== ERROR DETAILS ===');
 					console.error('Error object:', error);
