@@ -409,42 +409,48 @@ export const Resume: React.FC = function Resume() {
                             />
                           </div>
                           <ul className="max-h-60 overflow-y-auto">
-                            {filteredCountries.map((country, idx) => {
-                              const isSelected = selectedCountry.name === country.name;
-                              const isHovered = hoveredIndex === idx;
-                              return (
-                                <li
-                                  key={country.code + country.name}
-                                  className={`flex items-center justify-between px-4 py-2 transition-all
-                                    ${isSelected 
-                                      ? 'text-neutral-60 cursor-not-allowed bg-neutral-20' 
-                                      : isHovered 
-                                        ? 'text-primary-main bg-primary-surface cursor-pointer' 
-                                        : 'text-neutral-90 bg-white cursor-pointer hover:text-primary-main'
-                                    }
-                                  `}
-                                  onClick={() => {
-                                    if (!isSelected) {
-                                      setSelectedCountry(country);
-                                      setShowCountryDropdown(false);
-                                    }
-                                  }}
-                                  onMouseEnter={() => !isSelected && setHoveredIndex(idx)}
-                                  onMouseLeave={() => setHoveredIndex(null)}
-                                  aria-disabled={isSelected}
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <img 
-                                      src={country.flag} 
-                                      alt={country.name} 
-                                      className={`w-5 h-5 rounded-full ${isSelected ? 'opacity-50' : ''}`} 
-                                    />
-                                    <span>{country.name}</span>
-                                  </div>
-                                  <span>{country.code}</span>
-                                </li>
-                              );
-                            })}
+                            {filteredCountries.length > 0 ? (
+                              filteredCountries.map((country, idx) => {
+                                const isSelected = selectedCountry.name === country.name;
+                                const isHovered = hoveredIndex === idx;
+                                return (
+                                  <li
+                                    key={country.code + country.name}
+                                    className={`flex items-center justify-between px-4 py-2 transition-all
+                                      ${isSelected 
+                                        ? 'text-neutral-60 cursor-not-allowed bg-neutral-20' 
+                                        : isHovered 
+                                          ? 'text-primary-main bg-primary-surface cursor-pointer' 
+                                          : 'text-neutral-90 bg-white cursor-pointer hover:text-primary-main'
+                                      }
+                                    `}
+                                    onClick={() => {
+                                      if (!isSelected) {
+                                        setSelectedCountry(country);
+                                        setShowCountryDropdown(false);
+                                      }
+                                    }}
+                                    onMouseEnter={() => !isSelected && setHoveredIndex(idx)}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                    aria-disabled={isSelected}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <img 
+                                        src={country.flag} 
+                                        alt={country.name} 
+                                        className={`w-5 h-5 rounded-full ${isSelected ? 'opacity-50' : ''}`} 
+                                      />
+                                      <span>{country.name}</span>
+                                    </div>
+                                    <span>{country.code}</span>
+                                  </li>
+                                );
+                              })
+                            ) : (
+                              <li className="px-4 py-3 text-neutral-60 text-center">
+                                Keyword "{countrySearch}" tidak ditemukan
+                              </li>
+                            )}
                           </ul>
                         </div>
                       )}
