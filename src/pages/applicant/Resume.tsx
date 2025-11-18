@@ -8,6 +8,7 @@ import { WebcamCapture } from '@/components/applicant/WebcamCapture';
 import CustomCalendar from '@/components/shared/CustomCalendar';
 import { useAuth } from '@/context/AuthContext';
 import { useNotification } from '@/context/NotificationContext';
+import { usersService, applicationsService } from '@/services/supabaseService';
 // Mock job data
 const mockJob = {
   id: '1',
