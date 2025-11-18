@@ -43,9 +43,9 @@ export const ApplicantDashboard: React.FC = () => {
       <div className="px-6 pt-4">
         <Navbar title={undefined} showAvatar={true} avatarText={user?.email?.[0]?.toUpperCase() || 'A'} />
       </div>
-      <div className="flex container mx-auto py-8 gap-8 px-6">
-        {/* Left: Job List */}
-        <div className="w-1/3 flex flex-col gap-4">
+      <div className="flex container mx-auto py-8 gap-8 px-6 h-[calc(100vh-120px)]">
+        {/* Left: Job List - Scrollable */}
+        <div className="w-1/3 flex flex-col gap-4 overflow-y-auto pr-2">
           {jobs.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-neutral-70">No active jobs available</p>
@@ -61,8 +61,8 @@ export const ApplicantDashboard: React.FC = () => {
             ))
           )}
         </div>
-        {/* Right: Job Detail */}
-        <div className="w-2/3">
+        {/* Right: Job Detail - Fixed */}
+        <div className="w-2/3 flex-shrink-0">
           {selectedJob && (
             <JobDetailCard 
               job={selectedJob}

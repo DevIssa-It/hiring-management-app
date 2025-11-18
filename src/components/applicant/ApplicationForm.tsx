@@ -112,14 +112,23 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ job, onSubmit 
     email: user?.email || '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const formFields = createFormFields(job.formConfiguration);
   const visibleFields = formFields.filter(field => field.requirement !== 'off');
 
   const handleFieldChange = (fieldName: keyof ApplicationData, value: any) => {
     setFormData(prev => ({ ...prev, [fieldName]: value }));
-    if (errors[fieldName]) {
-      setErrors(prev => ({ ...prev, [fieldName]: '' }));
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+    
+    // Validate field immediately after touch
+    const field = visibleFields.find(f => f.name === fieldName);
+    if (field?.requirement === 'mandatory') {
+      if (!value || (typeof value === 'string' && !value.trim())) {
+        setErrors(prev => ({ ...prev, [fieldName]: `${field.label} is required` }));
+      } else {
+        setErrors(prev => ({ ...prev, [fieldName]: '' }));
+      }
     }
   };
 
@@ -181,7 +190,8 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({ job, onSubmit 
                 field={field}
                 value={formData[field.name]}
                 onChange={(value) => handleFieldChange(field.name, value)}
-                error={errors[field.name]}
+                onBlur={() => setTouched(prev => ({ ...prev, [field.name]: true }))}
+                error={touched[field.name] ? errors[field.name] : ''}
                 jobType={job.employmentType}
               />
             </div>

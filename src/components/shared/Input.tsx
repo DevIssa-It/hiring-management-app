@@ -6,6 +6,7 @@ export interface InputProps {
   error?: string;
   value: string;
   onChange: (value: string) => void;
+  onBlur?: () => void;
   disabled?: boolean;
   className?: string;
   icon?: React.ReactNode;
@@ -21,6 +22,7 @@ export const Input: React.FC<InputProps> = ({
   error,
   value,
   onChange,
+  onBlur,
   disabled = false,
   className = '',
   icon,
@@ -47,6 +49,7 @@ export const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
             disabled={disabled}
             required={required}
             className={`
@@ -71,6 +74,7 @@ export const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onBlur={onBlur}
             disabled={disabled}
             required={required}
             className={`

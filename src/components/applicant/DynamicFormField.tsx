@@ -8,6 +8,7 @@ export interface DynamicFormFieldProps {
   field: FormField;
   value: any;
   onChange: (value: any) => void;
+  onBlur?: () => void;
   error?: string;
   jobType?: EmploymentType;
 }
@@ -16,6 +17,7 @@ export const DynamicFormField: React.FC<DynamicFormFieldProps> = ({
   field,
   value,
   onChange,
+  onBlur,
   error,
   jobType,
 }) => {
@@ -40,6 +42,7 @@ export const DynamicFormField: React.FC<DynamicFormFieldProps> = ({
             type={field.type}
             value={value || ''}
             onChange={onChange}
+            onBlur={onBlur}
             placeholder={field.placeholder}
             required={isRequired}
             error={error}
@@ -51,8 +54,9 @@ export const DynamicFormField: React.FC<DynamicFormFieldProps> = ({
           <Input
             label={field.label}
             type="date"
-            value={value ? (value instanceof Date ? value.toISOString().split('T')[0] : value) : ''}
-            onChange={(val) => onChange(val ? new Date(val) : undefined)}
+            value={value || ''}
+            onChange={onChange}
+            onBlur={onBlur}
             required={isRequired}
             error={error}
           />
