@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/shared/Button';
-import Verified from '@/assets/verified.svg';
+import Verified from '@/assets/Verified.svg';
 
 const ApplicationSuccess: React.FC = () => {
   const navigate = useNavigate();
