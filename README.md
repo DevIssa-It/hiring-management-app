@@ -105,12 +105,12 @@ src/
 ## Default Users
 
 **Admin Account:**
-- Email: `admin@rakamin.com`
+- Email: `admin@talenthunt.com`
 - Password: `admin123`
 
 **Applicant Account:**
-- Email: `john.doe@example.com`
-- Password: `applicant123`
+- Email: `johndoe@example.com`
+- Password: `user123`
 
 ## Troubleshooting
 
