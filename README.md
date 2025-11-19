@@ -102,6 +102,17 @@ src/
 └── utils/              # Utility functions
 ```
 
+## API Documentation
+
+### Authentication
+- All API calls require authentication via Supabase Auth
+- JWT tokens are automatically handled by Supabase client
+
+### Main Endpoints
+- `/jobs` - Job listings management
+- `/applications` - Application submissions
+- `/profiles` - User profile data
+
 ## Default Users
 
 **Admin Account:**
