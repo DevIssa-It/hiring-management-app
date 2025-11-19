@@ -30,6 +30,18 @@ export enum EmploymentType {
   CONTRACT = 'contract',
 }
 
+export enum JobCategory {
+  ENGINEERING = 'engineering',
+  DESIGN = 'design',
+  MARKETING = 'marketing',
+  SALES = 'sales',
+  PRODUCT = 'product',
+  HR = 'hr',
+  FINANCE = 'finance',
+  OPERATIONS = 'operations',
+  OTHER = 'other',
+}
+
 // ==================== USER TYPES ====================
 
 export interface User {
@@ -69,6 +81,7 @@ export interface Job {
   title: string;
   description: string;
   department: string;
+  category?: JobCategory;
   companyName: string;
   logoUrl?: string;
   location: string;
