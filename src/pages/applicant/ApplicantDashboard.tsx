@@ -6,6 +6,7 @@ import { Navbar } from '@/components/shared/Navbar';
 import { JobCard } from '@/components/applicant/JobCard';
 import { JobDetailCard } from '@/components/applicant/JobDetailCard';
 import { Pagination } from '@/components/shared/Pagination';
+import { JobCardSkeleton, JobDetailSkeleton } from '@/components/shared/LoadingSkeleton';
 import type { Job } from '@/types';
 
 export const ApplicantDashboard: React.FC = () => {
@@ -47,10 +48,19 @@ export const ApplicantDashboard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main mx-auto mb-4"></div>
-          <p className="text-neutral-70">Loading jobs...</p>
+      <div className="min-h-screen bg-neutral-20 font-sans">
+        <div className="px-6 pt-4">
+          <Navbar title={undefined} showAvatar={true} avatarText={user?.email?.[0]?.toUpperCase() || 'A'} />
+        </div>
+        <div className="container mx-auto py-8 px-6">
+          <div className="flex gap-8">
+            <div className="w-1/3 space-y-4">
+              {[1, 2, 3, 4, 5].map(i => <JobCardSkeleton key={i} />)}
+            </div>
+            <div className="w-2/3">
+              <JobDetailSkeleton />
+            </div>
+          </div>
         </div>
       </div>
     );
