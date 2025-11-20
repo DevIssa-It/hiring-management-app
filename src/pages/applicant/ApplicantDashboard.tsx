@@ -15,12 +15,19 @@ export const ApplicantDashboard: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<any | null>(null);
   const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const jobsPerPage = 5;
+
+  const filteredJobs = jobs.filter(job => 
+    job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);
-  const totalPages = Math.ceil(jobs.length / jobsPerPage);
+  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
 
   useEffect(() => {
     const stored = localStorage.getItem('appliedJobs');
@@ -51,14 +58,29 @@ export const ApplicantDashboard: React.FC = () => {
       <div className="px-6 pt-4">
         <Navbar title={undefined} showAvatar={true} avatarText={user?.email?.[0]?.toUpperCase() || 'A'} />
       </div>
-      <div className="flex container mx-auto py-8 gap-8 px-6 h-[calc(100vh-120px)]">
-        {/* Left: Job List - Scrollable */}
-        <div className="w-1/3 flex flex-col gap-4">
-          <div className="flex-1 overflow-y-auto pr-2 space-y-4">
-            {jobs.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-neutral-70">No active jobs available</p>
-              </div>
+      <div className="container mx-auto py-8 px-6">
+        {/* Search Bar */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search jobs by title, company, or location..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full max-w-md px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+          />
+        </div>
+        
+        <div className="flex gap-8 h-[calc(100vh-200px)]">
+          {/* Left: Job List - Scrollable */}
+          <div className="w-1/3 flex flex-col gap-4">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-4">
+              {filteredJobs.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-neutral-70">{searchQuery ? 'No jobs found' : 'No active jobs available'}</p>
+                </div>
             ) : (
               currentJobs.map(job => (
                 <JobCard 
@@ -80,16 +102,17 @@ export const ApplicantDashboard: React.FC = () => {
             </div>
           )}
         </div>
-        {/* Right: Job Detail - Fixed */}
-        <div className="w-2/3 flex-shrink-0">
-          {selectedJob && (
-            <JobDetailCard 
-              job={selectedJob}
-              showApplyButton={true}
-              onApply={() => navigate(`/applicant/job/${selectedJob.id}`)}
-              isApplied={appliedJobs.includes(selectedJob.id)}
-            />
-          )}
+          {/* Right: Job Detail - Fixed */}
+          <div className="w-2/3 flex-shrink-0">
+            {selectedJob && (
+              <JobDetailCard 
+                job={selectedJob}
+                showApplyButton={true}
+                onApply={() => navigate(`/applicant/job/${selectedJob.id}`)}
+                isApplied={appliedJobs.includes(selectedJob.id)}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
