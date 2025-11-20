@@ -16,13 +16,16 @@ export const ApplicantDashboard: React.FC = () => {
   const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
   const jobsPerPage = 5;
 
-  const filteredJobs = jobs.filter(job => 
-    job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredJobs = jobs.filter(job => {
+    const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      job.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesType = filterType === 'all' || job.employmentType === filterType;
+    return matchesSearch && matchesType;
+  });
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
@@ -59,8 +62,8 @@ export const ApplicantDashboard: React.FC = () => {
         <Navbar title={undefined} showAvatar={true} avatarText={user?.email?.[0]?.toUpperCase() || 'A'} />
       </div>
       <div className="container mx-auto py-8 px-6">
-        {/* Search Bar */}
-        <div className="mb-6">
+        {/* Search and Filter Bar */}
+        <div className="mb-6 flex gap-4">
           <input
             type="text"
             placeholder="Search jobs by title, company, or location..."
@@ -69,8 +72,22 @@ export const ApplicantDashboard: React.FC = () => {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full max-w-md px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+            className="flex-1 max-w-md px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
           />
+          <select
+            value={filterType}
+            onChange={(e) => {
+              setFilterType(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+          >
+            <option value="all">All Types</option>
+            <option value="full_time">Full Time</option>
+            <option value="part_time">Part Time</option>
+            <option value="contract">Contract</option>
+            <option value="internship">Internship</option>
+          </select>
         </div>
         
         <div className="flex gap-8 h-[calc(100vh-200px)]">
