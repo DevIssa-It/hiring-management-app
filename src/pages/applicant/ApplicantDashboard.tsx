@@ -120,11 +120,24 @@ export const ApplicantDashboard: React.FC = () => {
           </select>
         </div>
         
-        {/* Job Count Badge */}
-        <div className="mb-4">
+        {/* Job Count Badge and Clear Filters */}
+        <div className="mb-4 flex items-center justify-between">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-surface text-primary-main">
             {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
           </span>
+          {(searchQuery || filterType !== 'all' || sortBy !== 'newest') && (
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setFilterType('all');
+                setSortBy('newest');
+                setCurrentPage(1);
+              }}
+              className="text-sm text-primary-main hover:text-primary-hover font-medium"
+            >
+              Clear all filters
+            </button>
+          )}
         </div>
         
         <div className="flex gap-8 h-[calc(100vh-240px)]">
