@@ -7,6 +7,7 @@ import { JobCard } from '@/components/applicant/JobCard';
 import { JobDetailCard } from '@/components/applicant/JobDetailCard';
 import { Pagination } from '@/components/shared/Pagination';
 import { JobCardSkeleton, JobDetailSkeleton } from '@/components/shared/LoadingSkeleton';
+import { EmptyState } from '@/components/shared/EmptyState';
 import type { Job } from '@/types';
 
 export const ApplicantDashboard: React.FC = () => {
@@ -145,9 +146,10 @@ export const ApplicantDashboard: React.FC = () => {
           <div className="w-1/3 flex flex-col gap-4">
             <div className="flex-1 overflow-y-auto pr-2 space-y-4">
               {filteredJobs.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-neutral-70">{searchQuery ? 'No jobs found' : 'No active jobs available'}</p>
-                </div>
+                <EmptyState
+                  title={searchQuery ? 'No jobs found' : 'No active jobs available'}
+                  description={searchQuery ? 'Try adjusting your search or filters' : 'Check back later for new opportunities'}
+                />
             ) : (
               currentJobs.map(job => (
                 <JobCard 
