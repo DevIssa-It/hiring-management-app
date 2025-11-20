@@ -80,7 +80,7 @@ export const ApplicantDashboard: React.FC = () => {
       </div>
       <div className="container mx-auto py-8 px-6">
         {/* Search and Filter Bar */}
-        <div className="mb-6 flex gap-4">
+        <div className="mb-4 flex gap-4">
           <input
             type="text"
             placeholder="Search jobs by title, company, or location..."
@@ -120,7 +120,14 @@ export const ApplicantDashboard: React.FC = () => {
           </select>
         </div>
         
-        <div className="flex gap-8 h-[calc(100vh-200px)]">
+        {/* Job Count Badge */}
+        <div className="mb-4">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-surface text-primary-main">
+            {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
+          </span>
+        </div>
+        
+        <div className="flex gap-8 h-[calc(100vh-240px)]">
           {/* Left: Job List - Scrollable */}
           <div className="w-1/3 flex flex-col gap-4">
             <div className="flex-1 overflow-y-auto pr-2 space-y-4">
