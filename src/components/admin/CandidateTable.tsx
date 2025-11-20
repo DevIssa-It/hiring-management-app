@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Application, JobFormConfiguration } from '@/types';
 import { calculateMatchRate } from '@/utils/matchRate';
 import { useResizableTable, type TableColumn } from '@/hooks/useResizableTable';
+import { Pagination } from '@/components/shared/Pagination';
 
 export interface CandidateTableProps {
   jobId: string;
@@ -59,6 +60,9 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
   formConfiguration,
   onApplicationClick,
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
   const initialColumns = createInitialColumns(formConfiguration);
   const {
     columns,
@@ -67,6 +71,11 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
     handleDragOver,
     handleDragEnd,
   } = useResizableTable({ initialColumns });
+  
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentApplications = applications.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(applications.length / itemsPerPage);
 
   const renderCellContent = (columnId: string, app: any) => {
     if (!app) return '-';
@@ -137,7 +146,7 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {applications?.map((app) => (
+          {currentApplications?.map((app) => (
             <tr 
               key={app?.id || Math.random()}
               className="hover:bg-neutral-30 cursor-pointer"
@@ -156,6 +165,15 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
           )) || []}
         </tbody>
       </table>
+      {totalPages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </div>
   );
 };
