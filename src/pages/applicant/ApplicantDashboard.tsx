@@ -18,6 +18,7 @@ export const ApplicantDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('newest');
   const jobsPerPage = 5;
 
   const filteredJobs = jobs.filter(job => {
@@ -26,6 +27,12 @@ export const ApplicantDashboard: React.FC = () => {
       job.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === 'all' || job.employmentType === filterType;
     return matchesSearch && matchesType;
+  }).sort((a, b) => {
+    if (sortBy === 'newest') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    if (sortBy === 'oldest') return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    if (sortBy === 'salary_high') return (b.salaryMax || 0) - (a.salaryMax || 0);
+    if (sortBy === 'salary_low') return (a.salaryMin || 0) - (b.salaryMin || 0);
+    return 0;
   });
 
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -97,6 +104,19 @@ export const ApplicantDashboard: React.FC = () => {
             <option value="part_time">Part Time</option>
             <option value="contract">Contract</option>
             <option value="internship">Internship</option>
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => {
+              setSortBy(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="salary_high">Highest Salary</option>
+            <option value="salary_low">Lowest Salary</option>
           </select>
         </div>
         
