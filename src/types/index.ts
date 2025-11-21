@@ -88,6 +88,7 @@ export interface Job {
   employmentType: EmploymentType;
   salaryMin?: number;
   salaryMax?: number;
+  deadline?: Date;
   status: JobStatus;
   formConfiguration: JobFormConfiguration;
   createdBy: string; // Admin ID
