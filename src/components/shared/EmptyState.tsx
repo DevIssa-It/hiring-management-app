@@ -1,37 +1,25 @@
-import React from 'react';
-import EmptyStateIcon from '@/assets/EmptyState.svg';
-
 interface EmptyStateProps {
+  icon?: string;
   title: string;
   description?: string;
-  actionLabel?: string;
-  onAction?: () => void;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({
-  title,
-  description,
-  actionLabel,
-  onAction
-}) => {
+export const EmptyState = ({ icon = '📭', title, description, action }: EmptyStateProps) => {
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-4">
-      <img 
-        src={EmptyStateIcon} 
-        alt="Empty state" 
-        className="w-48 h-48 mb-6 opacity-50"
-        onError={(e) => (e.currentTarget.style.display = 'none')}
-      />
-      <h3 className="text-xl font-semibold text-neutral-90 mb-2">{title}</h3>
-      {description && (
-        <p className="text-neutral-70 text-center max-w-md mb-6">{description}</p>
-      )}
-      {actionLabel && onAction && (
+    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+      <div className="text-6xl mb-4">{icon}</div>
+      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+      {description && <p className="text-gray-600 mb-6 max-w-md">{description}</p>}
+      {action && (
         <button
-          onClick={onAction}
-          className="px-6 py-2 bg-primary-main text-white rounded-lg hover:bg-primary-hover transition-colors"
+          onClick={action.onClick}
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          {actionLabel}
+          {action.label}
         </button>
       )}
     </div>
