@@ -2,15 +2,18 @@ import type { Job } from '@/types';
 import Logo1 from '@/assets/Logo1.svg';
 import { HiOutlineLocationMarker, HiOutlineBriefcase } from 'react-icons/hi';
 import { HiOutlineBanknotes } from 'react-icons/hi2';
+import { MdBookmark, MdBookmarkBorder } from 'react-icons/md';
 import { formatSalary } from '@/utils/salaryFormatter';
 
 export interface JobCardProps {
   job: Job;
   onClick: () => void;
   isSelected?: boolean;
+  isBookmarked?: boolean;
+  onBookmark?: (e: React.MouseEvent) => void;
 }
 
-export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = false }) => {
+export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = false, isBookmarked = false, onBookmark }) => {
   const isOpen = job.status === 'active';
 
   return (
@@ -24,6 +27,14 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
       `}>
       
       <div className="flex items-center gap-3 mb-3">
+        {onBookmark && (
+          <button
+            onClick={onBookmark}
+            className="ml-auto text-warning-main hover:scale-110 transition-transform"
+          >
+            {isBookmarked ? <MdBookmark className="w-5 h-5" /> : <MdBookmarkBorder className="w-5 h-5" />}
+          </button>
+        )}
         <div className="w-12 h-12 rounded-lg bg-neutral-40 flex items-center justify-center p-2">
           <img 
             src={job.logoUrl || Logo1} 

@@ -9,6 +9,7 @@ import { Pagination } from '@/components/shared/Pagination';
 import { JobCardSkeleton, JobDetailSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { useBookmarks } from '@/hooks/useBookmarks';
 import type { Job } from '@/types';
 
 export const ApplicantDashboard: React.FC = () => {
@@ -21,6 +22,7 @@ export const ApplicantDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('newest');
+  const { toggleBookmark, isBookmarked } = useBookmarks();
   const jobsPerPage = 5;
 
   const filteredJobs = jobs.filter(job => {
@@ -168,6 +170,11 @@ export const ApplicantDashboard: React.FC = () => {
                   job={job} 
                   onClick={() => setSelectedJob(job)}
                   isSelected={selectedJob?.id === job.id}
+                  isBookmarked={isBookmarked(job.id)}
+                  onBookmark={(e) => {
+                    e.stopPropagation();
+                    toggleBookmark(job.id);
+                  }}
                 />
               ))
             )}
