@@ -10,6 +10,7 @@ import { JobCardSkeleton, JobDetailSkeleton } from '@/components/shared/LoadingS
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import { useBookmarks } from '@/hooks/useBookmarks';
+import { useRecentSearches } from '@/hooks/useRecentSearches';
 import type { Job } from '@/types';
 
 export const ApplicantDashboard: React.FC = () => {
@@ -23,7 +24,9 @@ export const ApplicantDashboard: React.FC = () => {
   const [filterType, setFilterType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('newest');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [showRecentSearches, setShowRecentSearches] = useState(false);
   const { toggleBookmark, isBookmarked } = useBookmarks();
+  const { recentSearches, addSearch, clearSearches } = useRecentSearches();
   const jobsPerPage = 5;
 
   const filteredJobs = jobs.filter(job => {
@@ -96,16 +99,49 @@ export const ApplicantDashboard: React.FC = () => {
       <div className="container mx-auto py-8 px-6">
         {/* Search and Filter Bar */}
         <div className="mb-4 flex gap-4 items-center">
-          <input
-            type="text"
-            placeholder="Search jobs by title, company, or location..."
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="flex-1 max-w-md px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
-          />
+          <div className="relative flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="Search jobs by title, company, or location..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              onFocus={() => setShowRecentSearches(true)}
+              onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && searchQuery.trim()) {
+                  addSearch(searchQuery);
+                }
+              }}
+              className="w-full px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+            />
+            {showRecentSearches && recentSearches.length > 0 && (
+              <div className="absolute top-full mt-1 w-full bg-white border-2 border-neutral-40 rounded-lg shadow-lg z-10">
+                <div className="p-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs text-neutral-70 font-semibold">Recent Searches</span>
+                    <button onClick={clearSearches} className="text-xs text-primary-main hover:underline">
+                      Clear
+                    </button>
+                  </div>
+                  {recentSearches.map((search, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setSearchQuery(search);
+                        setShowRecentSearches(false);
+                      }}
+                      className="w-full text-left px-3 py-2 hover:bg-neutral-20 rounded text-sm"
+                    >
+                      {search}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <select
             value={filterType}
             onChange={(e) => {
