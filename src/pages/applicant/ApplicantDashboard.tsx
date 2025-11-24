@@ -22,6 +22,7 @@ export const ApplicantDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('newest');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const { toggleBookmark, isBookmarked } = useBookmarks();
   const jobsPerPage = 5;
 
@@ -94,7 +95,7 @@ export const ApplicantDashboard: React.FC = () => {
       </div>
       <div className="container mx-auto py-8 px-6">
         {/* Search and Filter Bar */}
-        <div className="mb-4 flex gap-4">
+        <div className="mb-4 flex gap-4 items-center">
           <input
             type="text"
             placeholder="Search jobs by title, company, or location..."
@@ -132,6 +133,20 @@ export const ApplicantDashboard: React.FC = () => {
             <option value="salary_high">Highest Salary</option>
             <option value="salary_low">Lowest Salary</option>
           </select>
+          <div className="flex gap-2 border-2 border-neutral-40 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`px-3 py-1 rounded ${viewMode === 'list' ? 'bg-primary-main text-white' : 'text-neutral-70'}`}
+            >
+              List
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`px-3 py-1 rounded ${viewMode === 'grid' ? 'bg-primary-main text-white' : 'text-neutral-70'}`}
+            >
+              Grid
+            </button>
+          </div>
         </div>
         
         {/* Job Count Badge and Clear Filters */}
