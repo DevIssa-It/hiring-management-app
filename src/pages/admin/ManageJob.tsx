@@ -9,7 +9,8 @@ import { jobsService, applicationsService } from '@/services/supabaseService';
 import { CandidateTable } from '@/components/admin/CandidateTable';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { exportToCSV } from '@/utils/exportCSV';
-import { MdFileDownload } from 'react-icons/md';
+import { MdFileDownload, MdPeople, MdCheckCircle, MdCancel, MdPending } from 'react-icons/md';
+import { StatsCard } from '@/components/admin/StatsCard';
 
 export const ManageJob = () => {
 	const { jobId } = useParams<{ jobId: string }>();
@@ -126,6 +127,33 @@ export const ManageJob = () => {
 				/>
 
 				<h2 className="text-lg font-bold mb-4">{jobTitle}</h2>
+
+				<div className="grid grid-cols-4 gap-4 mb-6">
+					<StatsCard 
+						title="Total Applicants" 
+						value={applications.length} 
+						icon={<MdPeople />}
+						color="primary"
+					/>
+					<StatsCard 
+						title="Accepted" 
+						value={applications.filter(a => a.status === 'accepted').length} 
+						icon={<MdCheckCircle />}
+						color="success"
+					/>
+					<StatsCard 
+						title="Pending" 
+						value={applications.filter(a => a.status === 'pending').length} 
+						icon={<MdPending />}
+						color="warning"
+					/>
+					<StatsCard 
+						title="Rejected" 
+						value={applications.filter(a => a.status === 'rejected').length} 
+						icon={<MdCancel />}
+						color="danger"
+					/>
+				</div>
 
 				<div className="flex justify-between items-center mb-4">
 					<input
