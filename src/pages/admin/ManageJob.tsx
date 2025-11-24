@@ -14,6 +14,7 @@ import { StatsCard } from '@/components/admin/StatsCard';
 
 export const ManageJob = () => {
 	const { jobId } = useParams<{ jobId: string }>();
+	const { showNotification } = useNotification();
 	const [job, setJob] = useState<any>(null);
 	const [applications, setApplications] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -186,6 +187,7 @@ export const ManageJob = () => {
 									applied_date: new Date(app.applied_at).toLocaleDateString()
 								}));
 								exportToCSV(csvData, `candidates-${jobTitle}`);
+								showNotification('success', 'Export Successful', `Exported ${csvData.length} candidates to CSV`);
 							}}
 							className="flex items-center gap-2 px-4 py-2 bg-primary-main text-white rounded-lg hover:bg-primary-hover transition-colors"
 						>
