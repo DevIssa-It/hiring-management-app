@@ -17,6 +17,11 @@ export const ManageJob = () => {
 	const [applications, setApplications] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [statusFilter, setStatusFilter] = useState<string>('all');
+
+	const filteredApplications = applications.filter(app => 
+		statusFilter === 'all' || app.status === statusFilter
+	);
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -114,9 +119,21 @@ export const ManageJob = () => {
 					]}
 				/>
 
-				<div className="flex justify-between items-center mb-6">
+				<div className="flex justify-between items-center mb-4">
 					<h2 className="text-lg font-bold">{jobTitle}</h2>
-					{applications.length > 0 && (
+					<div className="flex gap-3">
+						<select
+							value={statusFilter}
+							onChange={(e) => setStatusFilter(e.target.value)}
+							className="px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+						>
+							<option value="all">All Status</option>
+							<option value="pending">Pending</option>
+							<option value="reviewed">Reviewed</option>
+							<option value="accepted">Accepted</option>
+							<option value="rejected">Rejected</option>
+						</select>
+						{applications.length > 0 && (
 						<button
 							onClick={() => {
 								const csvData = applications.map(app => ({
@@ -133,7 +150,14 @@ export const ManageJob = () => {
 							<MdFileDownload className="w-5 h-5" />
 							Export CSV
 						</button>
-					)}
+						)}
+					</div>
+				</div>
+
+				<div className="mb-4">
+					<span className="text-sm text-neutral-70">
+						Showing {filteredApplications.length} of {applications.length} candidates
+					</span>
 				</div>
 
 				<div className="bg-white rounded-xl border border-neutral-40 shadow-soft p-2 min-h-[400px] flex flex-col items-stretch">
@@ -152,7 +176,7 @@ export const ManageJob = () => {
 					) : (
 						<CandidateTable
 							jobId={jobId || ''}
-							applications={applications || []}
+							applications={filteredApplications || []}
 							formConfiguration={job?.formConfiguration || {
 								fullName: 'mandatory',
 								email: 'mandatory',
