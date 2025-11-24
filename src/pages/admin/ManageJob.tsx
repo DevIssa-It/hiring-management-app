@@ -18,10 +18,15 @@ export const ManageJob = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [statusFilter, setStatusFilter] = useState<string>('all');
+	const [searchQuery, setSearchQuery] = useState('');
 
-	const filteredApplications = applications.filter(app => 
-		statusFilter === 'all' || app.status === statusFilter
-	);
+	const filteredApplications = applications.filter(app => {
+		const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
+		const matchesSearch = !searchQuery || 
+			app.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			app.email?.toLowerCase().includes(searchQuery.toLowerCase());
+		return matchesStatus && matchesSearch;
+	});
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -119,8 +124,16 @@ export const ManageJob = () => {
 					]}
 				/>
 
+				<h2 className="text-lg font-bold mb-4">{jobTitle}</h2>
+
 				<div className="flex justify-between items-center mb-4">
-					<h2 className="text-lg font-bold">{jobTitle}</h2>
+					<input
+						type="text"
+						placeholder="Search by name or email..."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						className="flex-1 max-w-md px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+					/>
 					<div className="flex gap-3">
 						<select
 							value={statusFilter}
