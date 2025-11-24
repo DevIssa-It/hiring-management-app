@@ -19,6 +19,7 @@ export const ManageJob = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [statusFilter, setStatusFilter] = useState<string>('all');
 	const [searchQuery, setSearchQuery] = useState('');
+	const [selectedCandidates, setSelectedCandidates] = useState<string[]>([]);
 
 	const filteredApplications = applications.filter(app => {
 		const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
@@ -167,10 +168,27 @@ export const ManageJob = () => {
 					</div>
 				</div>
 
-				<div className="mb-4">
+				<div className="mb-4 flex justify-between items-center">
 					<span className="text-sm text-neutral-70">
 						Showing {filteredApplications.length} of {applications.length} candidates
+						{selectedCandidates.length > 0 && ` • ${selectedCandidates.length} selected`}
 					</span>
+					{selectedCandidates.length > 0 && (
+						<div className="flex gap-2">
+							<button
+								onClick={() => setSelectedCandidates([])}
+								className="px-3 py-1 text-sm border border-neutral-40 rounded-lg hover:bg-neutral-20"
+							>
+								Clear Selection
+							</button>
+							<button
+								onClick={() => console.log('Bulk action:', selectedCandidates)}
+								className="px-3 py-1 text-sm bg-primary-main text-white rounded-lg hover:bg-primary-hover"
+							>
+								Bulk Action
+							</button>
+						</div>
+					)}
 				</div>
 
 				<div className="bg-white rounded-xl border border-neutral-40 shadow-soft p-2 min-h-[400px] flex flex-col items-stretch">
