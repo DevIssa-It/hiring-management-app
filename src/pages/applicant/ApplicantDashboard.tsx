@@ -8,6 +8,7 @@ import { JobDetailCard } from '@/components/applicant/JobDetailCard';
 import { Pagination } from '@/components/shared/Pagination';
 import { JobCardSkeleton, JobDetailSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 import type { Job } from '@/types';
 
 export const ApplicantDashboard: React.FC = () => {
@@ -53,6 +54,16 @@ export const ApplicantDashboard: React.FC = () => {
       setSelectedJob(jobs[0]);
     }
   }, [jobs, selectedJob]);
+
+  useKeyboardShortcut('/', () => {
+    document.querySelector<HTMLInputElement>('input[type="text"]')?.focus();
+  });
+
+  useKeyboardShortcut('Escape', () => {
+    setSearchQuery('');
+    setFilterType('all');
+    setSortBy('newest');
+  });
 
   if (isLoading) {
     return (
