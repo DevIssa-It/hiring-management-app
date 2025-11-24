@@ -1,31 +1,17 @@
-import { Application } from '../types';
+export const exportToCSV = (data: any[], filename: string) => {
+  if (!data.length) return;
 
-export const exportApplicationsToCSV = (applications: Application[], jobTitle: string) => {
-  const headers = [
-    'Name',
-    'Email',
-    'Phone',
-    'Gender',
-    'Location',
-    'Status',
-    'Applied Date',
-    'Expected Salary',
-  ];
-
-  const rows = applications.map(app => [
-    app.applicantData.fullName || '',
-    app.applicantData.email || '',
-    app.applicantData.phone || '',
-    app.applicantData.gender || '',
-    app.applicantData.domicile || '',
-    app.status,
-    new Date(app.appliedAt).toLocaleDateString(),
-    app.applicantData.expectedSalary || '',
-  ]);
-
+  const headers = Object.keys(data[0]);
   const csvContent = [
     headers.join(','),
-    ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ...data.map(row => 
+      headers.map(header => {
+        const value = row[header];
+        return typeof value === 'string' && value.includes(',') 
+          ? `"${value}"` 
+          : value;
+      }).join(',')
+    )
   ].join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -33,9 +19,8 @@ export const exportApplicationsToCSV = (applications: Application[], jobTitle: s
   const url = URL.createObjectURL(blob);
   
   link.setAttribute('href', url);
-  link.setAttribute('download', `${jobTitle}_applications_${new Date().toISOString().split('T')[0]}.csv`);
+  link.setAttribute('download', `${filename}.csv`);
   link.style.visibility = 'hidden';
-  
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

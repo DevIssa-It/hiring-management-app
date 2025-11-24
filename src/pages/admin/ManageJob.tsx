@@ -8,6 +8,8 @@ import EmptyApplicant from '@/assets/EmptyApplicant.svg';
 import { jobsService, applicationsService } from '@/services/supabaseService';
 import { CandidateTable } from '@/components/admin/CandidateTable';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
+import { exportToCSV } from '@/utils/exportCSV';
+import { MdFileDownload } from 'react-icons/md';
 
 export const ManageJob = () => {
 	const { jobId } = useParams<{ jobId: string }>();
@@ -112,7 +114,27 @@ export const ManageJob = () => {
 					]}
 				/>
 
-				<h2 className="text-lg font-bold mb-6">{jobTitle}</h2>
+				<div className="flex justify-between items-center mb-6">
+					<h2 className="text-lg font-bold">{jobTitle}</h2>
+					{applications.length > 0 && (
+						<button
+							onClick={() => {
+								const csvData = applications.map(app => ({
+									name: app.full_name,
+									email: app.email,
+									phone: app.phone,
+									status: app.status,
+									applied_date: new Date(app.applied_at).toLocaleDateString()
+								}));
+								exportToCSV(csvData, `candidates-${jobTitle}`);
+							}}
+							className="flex items-center gap-2 px-4 py-2 bg-primary-main text-white rounded-lg hover:bg-primary-hover transition-colors"
+						>
+							<MdFileDownload className="w-5 h-5" />
+							Export CSV
+						</button>
+					)}
+				</div>
 
 				<div className="bg-white rounded-xl border border-neutral-40 shadow-soft p-2 min-h-[400px] flex flex-col items-stretch">
 					{loading ? (
