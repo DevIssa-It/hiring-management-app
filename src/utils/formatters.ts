@@ -68,6 +68,15 @@ export const capitalizeFirst = (text: string): string => {
   return text.charAt(0).toUpperCase() + text.slice(1);
 };
 
+export const slugify = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 export const formatFieldName = (fieldName: string): string => {
   // Convert camelCase to Title Case
   // fullName -> Full Name
