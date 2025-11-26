@@ -123,3 +123,8 @@ export const uniqueBy = <T>(array: T[], key: keyof T): T[] => {
 export const clamp = (value: number, min: number, max: number): number => {
   return Math.min(Math.max(value, min), max);
 };
+
+export const generateRandomColor = (): string => {
+  const colors = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
