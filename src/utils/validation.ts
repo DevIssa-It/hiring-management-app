@@ -24,6 +24,12 @@ export const validateURL = (url: string): boolean => {
   return urlRegex.test(url);
 };
 
+export const isValidEmailDomain = (email: string, allowedDomains: string[]): boolean => {
+  if (!validateEmail(email)) return false;
+  const domain = email.split('@')[1];
+  return allowedDomains.includes(domain);
+};
+
 export const validateApplicationData = (
   data: ApplicationData,
   formConfig: JobFormConfiguration
