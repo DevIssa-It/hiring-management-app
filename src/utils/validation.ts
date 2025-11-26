@@ -30,6 +30,14 @@ export const isValidEmailDomain = (email: string, allowedDomains: string[]): boo
   return allowedDomains.includes(domain);
 };
 
+export const validatePasswordStrength = (password: string): { isStrong: boolean; message: string } => {
+  if (password.length < 8) return { isStrong: false, message: 'Password must be at least 8 characters' };
+  if (!/[A-Z]/.test(password)) return { isStrong: false, message: 'Password must contain uppercase letter' };
+  if (!/[a-z]/.test(password)) return { isStrong: false, message: 'Password must contain lowercase letter' };
+  if (!/[0-9]/.test(password)) return { isStrong: false, message: 'Password must contain number' };
+  return { isStrong: true, message: 'Strong password' };
+};
+
 export const validateApplicationData = (
   data: ApplicationData,
   formConfig: JobFormConfiguration
