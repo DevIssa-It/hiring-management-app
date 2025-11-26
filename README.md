@@ -1,5 +1,9 @@
 # Hiring Management App
 
+![Status](https://img.shields.io/badge/status-active-success.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 ## Project Overview
 
 A comprehensive hiring management application that streamlines the recruitment process for companies and job seekers. The system features role-based access control with separate interfaces for administrators and applicants.
