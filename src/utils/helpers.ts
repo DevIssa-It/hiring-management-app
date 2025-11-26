@@ -119,3 +119,7 @@ export const uniqueBy = <T>(array: T[], key: keyof T): T[] => {
     return true;
   });
 };
+
+export const clamp = (value: number, min: number, max: number): number => {
+  return Math.min(Math.max(value, min), max);
+};
