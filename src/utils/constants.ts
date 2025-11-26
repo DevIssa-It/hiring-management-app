@@ -63,3 +63,11 @@ export const APPLICATION_STATUS_COLORS = {
   rejected: 'red',
   accepted: 'purple',
 } as const;
+
+export const JOB_LEVEL_OPTIONS = [
+  { value: 'entry', label: 'Entry Level' },
+  { value: 'junior', label: 'Junior' },
+  { value: 'mid', label: 'Mid Level' },
+  { value: 'senior', label: 'Senior' },
+  { value: 'lead', label: 'Lead' },
+];
