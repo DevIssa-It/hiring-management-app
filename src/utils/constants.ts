@@ -55,3 +55,11 @@ export const PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
 
 export const CURRENCY_SYMBOL = 'Rp';
 export const CURRENCY_LOCALE = 'id-ID';
+
+export const APPLICATION_STATUS_COLORS = {
+  submitted: 'blue',
+  reviewed: 'yellow',
+  shortlisted: 'green',
+  rejected: 'red',
+  accepted: 'purple',
+} as const;
