@@ -76,3 +76,12 @@ export const formatFieldName = (fieldName: string): string => {
     .replace(/^./, (str) => str.toUpperCase())
     .trim();
 };
+
+export const formatShortDate = (date: Date | string): string => {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return new Intl.DateTimeFormat('id-ID', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(d);
+};

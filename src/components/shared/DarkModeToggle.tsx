@@ -1,16 +1,16 @@
-interface DarkModeToggleProps {
-  isDark: boolean;
-  onToggle: () => void;
-}
+import { FiMoon, FiSun } from 'react-icons/fi';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
-export const DarkModeToggle = ({ isDark, onToggle }: DarkModeToggleProps) => {
+export const DarkModeToggle = () => {
+  const { isDark, toggle } = useDarkMode();
+  
   return (
     <button
-      onClick={onToggle}
-      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+      onClick={toggle}
+      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
       aria-label="Toggle dark mode"
     >
-      {isDark ? '🌙' : '☀️'}
+      {isDark ? <FiMoon className="w-4 h-4" /> : <FiSun className="w-4 h-4" />}
     </button>
   );
 };

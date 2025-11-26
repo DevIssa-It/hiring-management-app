@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { FiLogOut, FiUser } from 'react-icons/fi';
+import { DarkModeToggle } from './DarkModeToggle';
 
 interface NavbarProps {
     title?: string;
@@ -43,13 +44,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div />
             )}
             
-            {showAvatar && (
-                <div className="relative">
-                    <button
-                        onClick={handleAvatarClick}
-                        className="w-10 h-10 bg-primary-main rounded-full flex items-center justify-center text-white font-semibold hover:bg-primary-hover transition-colors">
-                            {avatarText}
-                        </button>
+            <div className="flex items-center gap-3">
+                {/* Dark Mode Toggle */}
+                <DarkModeToggle />
+                
+                {showAvatar && (
+                    <div className="relative">
+                        <button
+                            onClick={handleAvatarClick}
+                            className="w-10 h-10 bg-primary-main rounded-full flex items-center justify-center text-white font-semibold hover:bg-primary-hover transition-colors">
+                                {avatarText}
+                            </button>
                     
                     {showDropdown && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
@@ -67,9 +72,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                                 </button>
                             </div>
                         </div>
-                    )}
-                </div>
-            )}
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
 
         <div id="divider" className="border-b border-neutral-40 -mx-6"></div>
