@@ -14,7 +14,7 @@ import { useRecentSearches } from '@/hooks/useRecentSearches';
 import type { Job } from '@/types';
 
 export const ApplicantDashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuth() || { user: null };
   const navigate = useNavigate();
   const { jobs, isLoading } = useActiveJobs();
   const [selectedJob, setSelectedJob] = useState<any | null>(null);
@@ -75,7 +75,7 @@ export const ApplicantDashboard: React.FC = () => {
     return (
       <div className="min-h-screen bg-neutral-20 font-sans">
         <div className="px-6 pt-4">
-          <Navbar title={undefined} showAvatar={true} avatarText={user?.email?.[0]?.toUpperCase() || 'A'} />
+          <Navbar title={undefined} showAvatar={!!user} avatarText={user?.email?.[0]?.toUpperCase() || 'G'} />
         </div>
         <div className="container mx-auto py-8 px-6">
           <div className="flex gap-8">
