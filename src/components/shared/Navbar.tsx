@@ -17,7 +17,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     onAvatarClick,
 }) => {
     const [showDropdown, setShowDropdown] = useState(false);
-    const { logout, user } = useAuth();
+    const auth = useAuth();
+    const { logout, user } = auth || { logout: () => {}, user: null };
 
     const handleLogout = async () => {
         try {
