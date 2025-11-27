@@ -47,8 +47,12 @@ function App() {
               </ProtectedRoute>
             } />
 
-            <Route path="/" element={<AuthRedirect />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={
+              <ProtectedRoute requiredRole="applicant">
+                <ApplicantDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </NotificationProvider>
