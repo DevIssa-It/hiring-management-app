@@ -2,11 +2,11 @@ import { FiMoon, FiSun } from 'react-icons/fi';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 export const DarkModeToggle = () => {
-  const { isDark, toggle } = useDarkMode();
+  const { isDark, toggleDark } = useDarkMode();
   
   return (
     <button
-      onClick={toggle}
+      onClick={toggleDark}
       className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
       aria-label="Toggle dark mode"
     >
