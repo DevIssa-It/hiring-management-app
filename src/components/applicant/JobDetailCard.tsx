@@ -19,9 +19,9 @@ export const JobDetailCard: React.FC<JobDetailCardProps> = ({
   isApplied = false
 }) => {
   return (
-    <div className="bg-neutral-10 rounded-lg border border-neutral-40 shadow-soft p-8">
+    <div className="bg-neutral-10 dark:bg-gray-800 rounded-lg border border-neutral-40 dark:border-gray-700 shadow-soft p-8">
       <div className="flex items-start gap-3 mb-4">
-        <div className="w-12 h-12 rounded-lg bg-neutral-40 flex items-center justify-center p-2">
+        <div className="w-12 h-12 rounded-lg bg-neutral-40 dark:bg-gray-700 flex items-center justify-center p-2">
           <img 
             src={job.logoUrl || Logo1} 
             alt="Company Logo" 
@@ -36,8 +36,8 @@ export const JobDetailCard: React.FC<JobDetailCardProps> = ({
               {job.employmentType ? job.employmentType.replace('_', '-').toUpperCase() : 'FULL-TIME'}
             </Badge>
           </div>
-          <div className="font-semibold text-lg text-neutral-100">{job.title}</div>
-          <div className="text-neutral-70">{job.companyName}</div>
+          <div className="font-semibold text-lg text-neutral-100 dark:text-gray-100">{job.title}</div>
+          <div className="text-neutral-70 dark:text-gray-300">{job.companyName}</div>
         </div>
         {showApplyButton && (
           <Button 
@@ -51,9 +51,9 @@ export const JobDetailCard: React.FC<JobDetailCardProps> = ({
         )}
       </div>
       
-      <hr className="border-neutral-40 my-4" />
+      <hr className="border-neutral-40 dark:border-gray-700 my-4" />
       
-      <div className="text-neutral-80 whitespace-pre-line">
+      <div className="text-neutral-80 dark:text-gray-300 whitespace-pre-line">
         {job.description}
       </div>
     </div>
