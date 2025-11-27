@@ -18,7 +18,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
 
   return (
     <div onClick={onClick} 
-      className={`rounded-xl shadow-soft cursor-pointer transition
+      className={`rounded-xl shadow-soft cursor-pointer transition relative
         ${isSelected
           ? 'bg-primary-surface border-2 border-primary-main p-4'
           : isOpen
@@ -26,15 +26,16 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
           : 'bg-neutral-30 border-2 border-neutral-40 p-4 opacity-60'}
       `}>
       
-      <div className="flex items-center gap-3 mb-3">
-        {onBookmark && (
-          <button
-            onClick={onBookmark}
-            className="ml-auto text-warning-main hover:scale-110 transition-transform"
-          >
-            {isBookmarked ? <MdBookmark className="w-5 h-5" /> : <MdBookmarkBorder className="w-5 h-5" />}
-          </button>
-        )}
+      {onBookmark && (
+        <button
+          onClick={onBookmark}
+          className="absolute top-4 right-4 text-warning-main hover:scale-110 transition-transform z-10"
+        >
+          {isBookmarked ? <MdBookmark className="w-5 h-5" /> : <MdBookmarkBorder className="w-5 h-5" />}
+        </button>
+      )}
+      
+      <div className="flex items-center gap-3 mb-3 pr-10">
         <div className="w-12 h-12 rounded-lg bg-neutral-40 flex items-center justify-center p-2">
           <img 
             src={job.logoUrl || Logo1} 
