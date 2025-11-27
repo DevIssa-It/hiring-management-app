@@ -4,6 +4,10 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
+## 🚀 Live Demo
+
+**[View Live Application](https://hiring-management-app-jet.vercel.app/)**
+
 ## Project Overview
 
 A comprehensive hiring management application that streamlines the recruitment process for companies and job seekers. The system features role-based access control with separate interfaces for administrators and applicants.
