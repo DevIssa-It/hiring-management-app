@@ -20,10 +20,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
     <div onClick={onClick} 
       className={`rounded-xl shadow-soft cursor-pointer transition relative
         ${isSelected
-          ? 'bg-primary-surface border-2 border-primary-main p-4'
+          ? 'bg-primary-surface dark:bg-gray-800 border-2 border-primary-main dark:border-primary-border p-4'
           : isOpen
-          ? 'bg-neutral-10 border-2 border-neutral-40 p-4'
-          : 'bg-neutral-30 border-2 border-neutral-40 p-4 opacity-60'}
+          ? 'bg-neutral-10 dark:bg-gray-800 border-2 border-neutral-40 dark:border-gray-700 p-4'
+          : 'bg-neutral-30 dark:bg-gray-900 border-2 border-neutral-40 dark:border-gray-700 p-4 opacity-60'}
       `}>
       
       {onBookmark && (
@@ -36,7 +36,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
       )}
       
       <div className="flex items-center gap-3 mb-3 pr-10">
-        <div className="w-12 h-12 rounded-lg bg-neutral-40 flex items-center justify-center p-2">
+        <div className="w-12 h-12 rounded-lg bg-neutral-40 dark:bg-gray-700 flex items-center justify-center p-2">
           <img 
             src={job.logoUrl || Logo1} 
             alt="Company Logo" 
@@ -44,24 +44,24 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onClick, isSelected = fal
           />
         </div>
         <div>
-          <div className={`font-semibold text-lg ${isOpen ? 'text-neutral-100' : 'text-neutral-70'}`}>
+          <div className={`font-semibold text-lg ${isOpen ? 'text-neutral-100 dark:text-gray-100' : 'text-neutral-70 dark:text-gray-400'}`}>
             {job.title}
           </div>
-          <div className={`text-sm ${isOpen ? 'text-neutral-70' : 'text-neutral-50'}`}>
+          <div className={`text-sm ${isOpen ? 'text-neutral-70 dark:text-gray-300' : 'text-neutral-50 dark:text-gray-500'}`}>
             {job.companyName}
           </div>
         </div>
       </div>
 
-      <hr className="border-dashed border-neutral-40 my-3" />
+      <hr className="border-dashed border-neutral-40 dark:border-gray-700 my-3" />
       
       <div className="space-y-2">
-        <div className={`flex items-center gap-2 text-sm ${isOpen ? 'text-neutral-80' : 'text-neutral-60'}`}>
+        <div className={`flex items-center gap-2 text-sm ${isOpen ? 'text-neutral-80 dark:text-gray-300' : 'text-neutral-60 dark:text-gray-500'}`}>
           <HiOutlineLocationMarker className="w-4 h-4" />
           <span>{job.location}</span>
         </div>
         
-        <div className={`flex items-center gap-2 text-sm ${isOpen ? 'text-neutral-80' : 'text-neutral-60'}`}>
+        <div className={`flex items-center gap-2 text-sm ${isOpen ? 'text-neutral-80 dark:text-gray-300' : 'text-neutral-60 dark:text-gray-500'}`}>
           <HiOutlineBanknotes className="w-4 h-4" />
           <span>{formatSalary(job.salaryMin, job.salaryMax)}</span>
         </div>
