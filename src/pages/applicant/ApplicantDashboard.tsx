@@ -73,7 +73,7 @@ export const ApplicantDashboard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-20 font-sans">
+      <div className="min-h-screen bg-neutral-20 dark:bg-gray-900 font-sans">
         <div className="px-6 pt-4">
           <Navbar title={undefined} showAvatar={!!user} avatarText={user?.email?.[0]?.toUpperCase() || 'G'} />
         </div>
@@ -92,7 +92,7 @@ export const ApplicantDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-20 font-sans">
+    <div className="min-h-screen bg-neutral-20 dark:bg-gray-900 font-sans">
       <div className="px-6 pt-4">
         <Navbar title={undefined} showAvatar={true} avatarText={user?.email?.[0]?.toUpperCase() || 'A'} />
       </div>
@@ -115,13 +115,13 @@ export const ApplicantDashboard: React.FC = () => {
                   addSearch(searchQuery);
                 }
               }}
-              className="w-full px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+              className="w-full px-4 py-2 border-2 border-neutral-40 dark:border-gray-700 rounded-lg focus:border-primary-main focus:outline-none bg-white dark:bg-gray-800 text-neutral-100 dark:text-gray-100"
             />
             {showRecentSearches && recentSearches.length > 0 && (
-              <div className="absolute top-full mt-1 w-full bg-white border-2 border-neutral-40 rounded-lg shadow-lg z-10">
+              <div className="absolute top-full mt-1 w-full bg-white dark:bg-gray-800 border-2 border-neutral-40 dark:border-gray-700 rounded-lg shadow-lg z-10">
                 <div className="p-2">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs text-neutral-70 font-semibold">Recent Searches</span>
+                    <span className="text-xs text-neutral-70 dark:text-gray-300 font-semibold">Recent Searches</span>
                     <button onClick={clearSearches} className="text-xs text-primary-main hover:underline">
                       Clear
                     </button>
@@ -133,7 +133,7 @@ export const ApplicantDashboard: React.FC = () => {
                         setSearchQuery(search);
                         setShowRecentSearches(false);
                       }}
-                      className="w-full text-left px-3 py-2 hover:bg-neutral-20 rounded text-sm"
+                      className="w-full text-left px-3 py-2 hover:bg-neutral-20 dark:hover:bg-gray-700 rounded text-sm text-neutral-100 dark:text-gray-100"
                     >
                       {search}
                     </button>
@@ -148,7 +148,7 @@ export const ApplicantDashboard: React.FC = () => {
               setFilterType(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+            className="px-4 py-2 border-2 border-neutral-40 dark:border-gray-700 rounded-lg focus:border-primary-main focus:outline-none bg-white dark:bg-gray-800 text-neutral-100 dark:text-gray-100"
           >
             <option value="all">All Types</option>
             <option value="full_time">Full Time</option>
@@ -162,23 +162,23 @@ export const ApplicantDashboard: React.FC = () => {
               setSortBy(e.target.value);
               setCurrentPage(1);
             }}
-            className="px-4 py-2 border-2 border-neutral-40 rounded-lg focus:border-primary-main focus:outline-none"
+            className="px-4 py-2 border-2 border-neutral-40 dark:border-gray-700 rounded-lg focus:border-primary-main focus:outline-none bg-white dark:bg-gray-800 text-neutral-100 dark:text-gray-100"
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
             <option value="salary_high">Highest Salary</option>
             <option value="salary_low">Lowest Salary</option>
           </select>
-          <div className="flex gap-2 border-2 border-neutral-40 rounded-lg p-1">
+          <div className="flex gap-2 border-2 border-neutral-40 dark:border-gray-700 rounded-lg p-1 bg-white dark:bg-gray-800">
             <button
               onClick={() => setViewMode('list')}
-              className={`px-3 py-1 rounded ${viewMode === 'list' ? 'bg-primary-main text-white' : 'text-neutral-70'}`}
+              className={`px-3 py-1 rounded ${viewMode === 'list' ? 'bg-primary-main text-white' : 'text-neutral-70 dark:text-gray-300'}`}
             >
               List
             </button>
             <button
               onClick={() => setViewMode('grid')}
-              className={`px-3 py-1 rounded ${viewMode === 'grid' ? 'bg-primary-main text-white' : 'text-neutral-70'}`}
+              className={`px-3 py-1 rounded ${viewMode === 'grid' ? 'bg-primary-main text-white' : 'text-neutral-70 dark:text-gray-300'}`}
             >
               Grid
             </button>
@@ -187,7 +187,7 @@ export const ApplicantDashboard: React.FC = () => {
         
         {/* Job Count Badge and Clear Filters */}
         <div className="mb-4 flex items-center justify-between">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-surface text-primary-main">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-surface dark:bg-gray-800 text-primary-main dark:text-primary-border">
             {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
           </span>
           {(searchQuery || filterType !== 'all' || sortBy !== 'newest') && (
