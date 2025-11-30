@@ -3,6 +3,9 @@
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
+![React](https://img.shields.io/badge/React-18.2.0-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.2.2-blue.svg)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.3.6-38bdf8.svg)
 
 ## 🚀 Live Demo
 
@@ -152,3 +155,23 @@ src/
 - Check the browser console for errors
 - Review Supabase dashboard for database issues
 - Verify your environment variables are correct
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Documentation
+
+- [API Documentation](docs/API.md)
+- [Deployment Guide](docs/DEPLOYMENT.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgments
+
+- Built with React and TypeScript
+- Styled with Tailwind CSS
+- Powered by Supabase
