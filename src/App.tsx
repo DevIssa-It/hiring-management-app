@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import { NotificationProvider } from './context/NotificationContext'
 import { ProtectedRoute } from './components/shared/ProtectedRoute'
 import { AuthRedirect } from './components/shared/AuthRedirect'
+import { ErrorBoundary } from './components/shared/ErrorBoundary'
 import { LoginPage } from './pages/LoginPage'
 import { Unauthorized } from './pages/Unauthorized'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
@@ -13,7 +14,8 @@ import ApplicationSuccess from './pages/applicant/ApplicationSuccess'
 
 function App() {
   return (
-    <AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
       <NotificationProvider>
         <BrowserRouter>
           <Routes>
@@ -53,6 +55,7 @@ function App() {
         </BrowserRouter>
       </NotificationProvider>
     </AuthProvider>
+    </ErrorBoundary>
   )
 }
 
