@@ -71,3 +71,31 @@ export const JOB_LEVEL_OPTIONS = [
   { value: 'senior', label: 'Senior' },
   { value: 'lead', label: 'Lead' },
 ];
+
+export const APPLICATION_STATUSES = {
+  SUBMITTED: 'submitted',
+  REVIEWED: 'reviewed',
+  SHORTLISTED: 'shortlisted',
+  REJECTED: 'rejected',
+  ACCEPTED: 'accepted',
+} as const;
+
+export const JOB_STATUSES = {
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+  DRAFT: 'draft',
+  PUBLISHED: 'published',
+} as const;
+
+export const EMPLOYMENT_TYPES = {
+  INTERN: 'intern',
+  FULL_TIME: 'full_time',
+  PART_TIME: 'part_time',
+  CONTRACT: 'contract',
+} as const;
+
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const ALLOWED_FILE_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+export const DEBOUNCE_DELAY = 300; // ms
+export const TOAST_DURATION = 3000; // ms
