@@ -27,13 +27,7 @@ export default defineConfig({
       }
     },
     sourcemap: false, // Disable sourcemaps in production for smaller bundle
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true
-      }
-    }
+    minify: 'esbuild', // Use esbuild for faster minification (default in Vite)
   },
   server: {
     port: 5173,
