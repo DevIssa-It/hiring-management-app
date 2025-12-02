@@ -5,7 +5,13 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react({
-    fastRefresh: false // Disable fast refresh to fix RefreshRuntime error
+    fastRefresh: true, // Enable fast refresh for better DX
+    babel: {
+      plugins: [
+        // Remove development only code in production
+        ['transform-remove-console', { exclude: ['error', 'warn'] }]
+      ]
+    }
   })],
   resolve: {
     alias: {
@@ -14,10 +20,30 @@ export default defineConfig({
   },
   optimizeDeps: {
     force: true,
-    include: ['@supabase/supabase-js']
+    include: ['@supabase/supabase-js', 'react', 'react-dom', 'react-router-dom']
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'supabase': ['@supabase/supabase-js'],
+          'utils': ['date-fns']
+        }
+      }
+    },
+    sourcemap: false, // Disable sourcemaps in production for smaller bundle
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console logs in production
+        drop_debugger: true
+      }
+    }
   },
   server: {
     port: 5173,
-    host: true
+    host: true,
+    open: true // Auto-open browser on server start
   }
 })
