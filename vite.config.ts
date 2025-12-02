@@ -5,13 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react({
-    fastRefresh: true, // Enable fast refresh for better DX
-    babel: {
-      plugins: [
-        // Remove development only code in production
-        ['transform-remove-console', { exclude: ['error', 'warn'] }]
-      ]
-    }
+    fastRefresh: true // Enable fast refresh for better DX
   })],
   resolve: {
     alias: {
